@@ -20,6 +20,9 @@ lerna-debug.log*
 !.yarn/sdks
 !.yarn/versions
 
+# GraphQL generated
+/src/@generated
+
 # OS
 .DS_Store
 
@@ -42,3 +45,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# env
+.env
+.env.local
