@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductCreateInput } from 'src/@generated/product/product-create.input';
-import { ProductUpdateInput } from 'src/@generated/product/product-update.input';
+import { ProductUpdateWithWhereUniqueWithoutTaxRateInput } from 'src/@generated/product/product-update-with-where-unique-without-tax-rate.input';
 import { ProductWhereUniqueInput } from 'src/@generated/product/product-where-unique.input';
 import { Product } from 'src/@generated/product/product.model';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -19,19 +19,16 @@ export class ProductsService {
 
   findOne(productWhereUniqueInput: ProductWhereUniqueInput) {
     return this.prisma.product.findUnique({
-      where: { id: productWhereUniqueInput.id },
+      where: productWhereUniqueInput,
       include: { productVariants: true },
     });
   }
 
-  update(updateProductInput: ProductUpdateInput) {
-    return this.prisma.product.update({
-      where: { id: updateProductInput.id.set },
-      data: updateProductInput,
-    });
+  update(updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput) {
+    return this.prisma.product.update(updateProductInput);
   }
 
-  remove(id: string) {
-    return this.prisma.product.delete({ where: { id } });
+  remove(productWhereUniqueInput: ProductWhereUniqueInput) {
+    return this.prisma.product.delete({ where: productWhereUniqueInput });
   }
 }

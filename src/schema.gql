@@ -2,6 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ProductCategoryCount {
+  products: Int!
+}
+
+type ProductCategory {
+  id: ID!
+  name: String!
+  description: String
+  products: [Product!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  _count: ProductCategoryCount!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type ProductVariant {
   id: ID!
   name: String!
@@ -9,6 +28,8 @@ type ProductVariant {
   sku: String
   weight: Decimal
   available: Boolean!
+  price: Decimal!
+  salePrice: Decimal
   productId: String!
   product: Product!
   createdAt: DateTime!
@@ -18,10 +39,20 @@ type ProductVariant {
 """An arbitrary-precision Decimal type"""
 scalar Decimal
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type TaxRateCount {
+  products: Int!
+}
+
+type TaxRate {
+  id: ID!
+  name: String!
+  description: String
+  rate: Decimal!
+  products: [Product!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  _count: TaxRateCount!
+}
 
 type ProductCount {
   productVariants: Int!
@@ -32,7 +63,11 @@ type Product {
   name: String!
   description: String
   type: ProductType!
+  productCategory: ProductCategory
+  productCategoryId: Int
   productVariants: [ProductVariant!]
+  taxRate: TaxRate
+  taxRateId: Int
   createdAt: DateTime!
   updatedAt: DateTime!
   _count: ProductCount!
@@ -46,16 +81,25 @@ enum ProductType {
 type Query {
   products: [Product!]!
   product(productWhereUniqueInput: ProductWhereUniqueInput!): Product!
+  productVariants: [ProductVariant!]!
+  productVariant(findOneProductVariantInput: ProductVariantWhereUniqueInput!): ProductVariant!
 }
 
 input ProductWhereUniqueInput {
   id: String
 }
 
+input ProductVariantWhereUniqueInput {
+  id: String
+}
+
 type Mutation {
   createProduct(createProductInput: ProductCreateInput!): Product!
-  updateProduct(updateProductInput: ProductUpdateInput!): Product!
-  removeProduct(id: String!): Product!
+  updateProduct(updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput!): Product!
+  removeProduct(removeProductInput: ProductWhereUniqueInput!): Product!
+  createProductVariant(createProductVariantInput: ProductVariantCreateInput!): ProductVariant!
+  updateProductVariant(updateProductVariantInput: ProductVariantUpdateWithWhereUniqueWithoutProductInput!): ProductVariant!
+  removeProductVariant(productVariantWhereUniqueInput: ProductVariantWhereUniqueInput!): ProductVariant!
 }
 
 input ProductCreateInput {
@@ -63,9 +107,33 @@ input ProductCreateInput {
   name: String!
   description: String
   type: ProductType
+  productCategory: ProductCategoryCreateNestedOneWithoutProductsInput
   productVariants: ProductVariantCreateNestedManyWithoutProductInput
+  taxRate: TaxRateCreateNestedOneWithoutProductsInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductCategoryCreateNestedOneWithoutProductsInput {
+  create: ProductCategoryCreateWithoutProductsInput
+  connectOrCreate: ProductCategoryCreateOrConnectWithoutProductsInput
+  connect: ProductCategoryWhereUniqueInput
+}
+
+input ProductCategoryCreateWithoutProductsInput {
+  name: String!
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductCategoryCreateOrConnectWithoutProductsInput {
+  where: ProductCategoryWhereUniqueInput!
+  create: ProductCategoryCreateWithoutProductsInput!
+}
+
+input ProductCategoryWhereUniqueInput {
+  id: Int
 }
 
 input ProductVariantCreateNestedManyWithoutProductInput {
@@ -82,6 +150,8 @@ input ProductVariantCreateWithoutProductInput {
   sku: String
   weight: Decimal
   available: Boolean
+  price: Decimal!
+  salePrice: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -89,10 +159,6 @@ input ProductVariantCreateWithoutProductInput {
 input ProductVariantCreateOrConnectWithoutProductInput {
   where: ProductVariantWhereUniqueInput!
   create: ProductVariantCreateWithoutProductInput!
-}
-
-input ProductVariantWhereUniqueInput {
-  id: String
 }
 
 input ProductVariantCreateManyProductInputEnvelope {
@@ -107,15 +173,46 @@ input ProductVariantCreateManyProductInput {
   sku: String
   weight: Decimal
   available: Boolean
+  price: Decimal!
+  salePrice: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }
 
-input ProductUpdateInput {
+input TaxRateCreateNestedOneWithoutProductsInput {
+  create: TaxRateCreateWithoutProductsInput
+  connectOrCreate: TaxRateCreateOrConnectWithoutProductsInput
+  connect: TaxRateWhereUniqueInput
+}
+
+input TaxRateCreateWithoutProductsInput {
+  name: String!
+  description: String
+  rate: Decimal!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TaxRateCreateOrConnectWithoutProductsInput {
+  where: TaxRateWhereUniqueInput!
+  create: TaxRateCreateWithoutProductsInput!
+}
+
+input TaxRateWhereUniqueInput {
+  id: Int
+}
+
+input ProductUpdateWithWhereUniqueWithoutTaxRateInput {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateWithoutTaxRateInput!
+}
+
+input ProductUpdateWithoutTaxRateInput {
   id: StringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   description: NullableStringFieldUpdateOperationsInput
   type: EnumProductTypeFieldUpdateOperationsInput
+  productCategory: ProductCategoryUpdateOneWithoutProductsNestedInput
   productVariants: ProductVariantUpdateManyWithoutProductNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -131,6 +228,32 @@ input NullableStringFieldUpdateOperationsInput {
 
 input EnumProductTypeFieldUpdateOperationsInput {
   set: ProductType
+}
+
+input ProductCategoryUpdateOneWithoutProductsNestedInput {
+  create: ProductCategoryCreateWithoutProductsInput
+  connectOrCreate: ProductCategoryCreateOrConnectWithoutProductsInput
+  upsert: ProductCategoryUpsertWithoutProductsInput
+  disconnect: Boolean
+  delete: Boolean
+  connect: ProductCategoryWhereUniqueInput
+  update: ProductCategoryUpdateWithoutProductsInput
+}
+
+input ProductCategoryUpsertWithoutProductsInput {
+  update: ProductCategoryUpdateWithoutProductsInput!
+  create: ProductCategoryCreateWithoutProductsInput!
+}
+
+input ProductCategoryUpdateWithoutProductsInput {
+  name: StringFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
 }
 
 input ProductVariantUpdateManyWithoutProductNestedInput {
@@ -160,6 +283,8 @@ input ProductVariantUpdateWithoutProductInput {
   sku: NullableStringFieldUpdateOperationsInput
   weight: NullableDecimalFieldUpdateOperationsInput
   available: BoolFieldUpdateOperationsInput
+  price: DecimalFieldUpdateOperationsInput
+  salePrice: NullableDecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
@@ -176,8 +301,12 @@ input BoolFieldUpdateOperationsInput {
   set: Boolean
 }
 
-input DateTimeFieldUpdateOperationsInput {
-  set: DateTime
+input DecimalFieldUpdateOperationsInput {
+  set: Decimal
+  increment: Decimal
+  decrement: Decimal
+  multiply: Decimal
+  divide: Decimal
 }
 
 input ProductVariantUpdateWithWhereUniqueWithoutProductInput {
@@ -200,6 +329,8 @@ input ProductVariantScalarWhereInput {
   sku: StringNullableFilter
   weight: DecimalNullableFilter
   available: BoolFilter
+  price: DecimalFilter
+  salePrice: DecimalNullableFilter
   productId: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -300,6 +431,28 @@ input NestedBoolFilter {
   not: NestedBoolFilter
 }
 
+input DecimalFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: NestedDecimalFilter
+}
+
+input NestedDecimalFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: NestedDecimalFilter
+}
+
 input DateTimeFilter {
   equals: DateTime
   in: [DateTime!]
@@ -329,6 +482,44 @@ input ProductVariantUpdateManyMutationInput {
   sku: NullableStringFieldUpdateOperationsInput
   weight: NullableDecimalFieldUpdateOperationsInput
   available: BoolFieldUpdateOperationsInput
+  price: DecimalFieldUpdateOperationsInput
+  salePrice: NullableDecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input ProductVariantCreateInput {
+  id: String
+  name: String!
+  description: String
+  sku: String
+  weight: Decimal
+  available: Boolean
+  price: Decimal!
+  salePrice: Decimal
+  product: ProductCreateNestedOneWithoutProductVariantsInput!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductCreateNestedOneWithoutProductVariantsInput {
+  create: ProductCreateWithoutProductVariantsInput
+  connectOrCreate: ProductCreateOrConnectWithoutProductVariantsInput
+  connect: ProductWhereUniqueInput
+}
+
+input ProductCreateWithoutProductVariantsInput {
+  id: String
+  name: String!
+  description: String
+  type: ProductType
+  productCategory: ProductCategoryCreateNestedOneWithoutProductsInput
+  taxRate: TaxRateCreateNestedOneWithoutProductsInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductCreateOrConnectWithoutProductVariantsInput {
+  where: ProductWhereUniqueInput!
+  create: ProductCreateWithoutProductVariantsInput!
 }

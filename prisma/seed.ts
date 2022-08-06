@@ -13,6 +13,7 @@ async function main() {
             name: 'Black color',
             description: 'Great color',
             sku: 'SKU-001',
+            price: 10.99,
           },
         ],
       },

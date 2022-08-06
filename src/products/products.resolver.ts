@@ -1,9 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
 import { ProductCreateInput } from 'src/@generated/product/product-create.input';
-import { ProductUpdateInput } from 'src/@generated/product/product-update.input';
 import { Product } from 'src/@generated/product/product.model';
 import { ProductWhereUniqueInput } from 'src/@generated/product/product-where-unique.input';
+import { ProductUpdateWithWhereUniqueWithoutTaxRateInput } from 'src/@generated/product/product-update-with-where-unique-without-tax-rate.input';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -31,13 +31,17 @@ export class ProductsResolver {
 
   @Mutation(() => Product)
   updateProduct(
-    @Args('updateProductInput') updateProductInput: ProductUpdateInput,
+    @Args('updateProductInput')
+    updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput,
   ) {
     return this.productsService.update(updateProductInput);
   }
 
   @Mutation(() => Product)
-  removeProduct(@Args('id') id: string) {
-    return this.productsService.remove(id);
+  removeProduct(
+    @Args('removeProductInput')
+    removeProductInput: ProductWhereUniqueInput,
+  ) {
+    return this.productsService.remove(removeProductInput);
   }
 }
