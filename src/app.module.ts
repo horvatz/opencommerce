@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
+import { CheckoutModule } from './checkout/checkout.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProductVariantsModule } from './product-variants/product-variants.modul
     ProductsModule,
     PrismaModule,
     ProductVariantsModule,
+    CheckoutModule,
   ],
   controllers: [AppController],
   providers: [AppService],
