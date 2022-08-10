@@ -2,114 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type ProductCategoryCount {
-  products: Int!
-}
-
 type ProductCategory {
   id: ID!
   name: String!
   description: String
-  products: [Product!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  _count: ProductCategoryCount!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type CountryCount {
-  Address: Int!
-}
-
-type Country {
-  id: ID!
-  name: String!
-  code: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  Address: [Address!]
-  _count: CountryCount!
-}
-
-type AddressCount {
-  shippingAddressCheckout: Int!
-  billingAddressCheckout: Int!
-}
-
-type Address {
-  id: ID!
-  firstName: String!
-  lastName: String!
-  companyName: String
-  phone: String
-  vatNumber: String
-  streetAddress: String!
-  zipCode: String!
-  city: String!
-  countryId: Int!
-  country: Country!
-  shippingAddressCheckout: [Checkout!]
-  billingAddressCheckout: [Checkout!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  _count: AddressCount!
-}
-
-type ShippingMethodCount {
-  checkout: Int!
-}
-
-type ShippingMethod {
-  id: ID!
-  name: String!
-  description: String
-  minDeliveryDays: Int
-  maxDeliveryDays: Int
-  price: Decimal!
-  active: Boolean!
-  checkout: [Checkout!]
-  _count: ShippingMethodCount!
-}
-
-"""An arbitrary-precision Decimal type"""
-scalar Decimal
-
-type CheckoutCount {
-  checkoutItem: Int!
-}
-
-type Checkout {
-  id: ID!
-  note: String
-  shippingAddressId: String
-  shippingAddress: Address
-  billingAddressId: String
-  billingAddress: Address
-  checkoutItem: [CheckoutItem!]
-  shippingMethodId: Int
-  shippingMethod: ShippingMethod
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  _count: CheckoutCount!
-}
-
-type CheckoutItem {
-  id: ID!
-  quantity: Int!
-  variantId: String!
-  variant: ProductVariant!
-  checkoutId: String!
-  checkout: Checkout!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type ProductVariantCount {
-  CheckoutItem: Int!
 }
 
 type ProductVariant {
@@ -121,31 +17,16 @@ type ProductVariant {
   available: Boolean!
   price: Decimal!
   salePrice: Decimal
-  productId: String!
-  product: Product!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  CheckoutItem: [CheckoutItem!]
-  _count: ProductVariantCount!
 }
 
-type TaxRateCount {
-  products: Int!
-}
+"""An arbitrary-precision Decimal type"""
+scalar Decimal
 
 type TaxRate {
   id: ID!
   name: String!
   description: String
   rate: Decimal!
-  products: [Product!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  _count: TaxRateCount!
-}
-
-type ProductCount {
-  productVariants: Int!
 }
 
 type Product {
@@ -153,14 +34,9 @@ type Product {
   name: String!
   description: String
   type: ProductType!
-  productCategory: ProductCategory
-  productCategoryId: Int
-  productVariants: [ProductVariant!]
+  categories: [ProductCategory!]
+  variants: [ProductVariant!]
   taxRate: TaxRate
-  taxRateId: Int
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  _count: ProductCount!
 }
 
 enum ProductType {
@@ -168,1231 +44,125 @@ enum ProductType {
   DIGITAL
 }
 
-type Query {
-  products: [Product!]!
-  product(productWhereUniqueInput: ProductWhereUniqueInput!): Product!
-  productVariants: [ProductVariant!]!
-  productVariant(findOneProductVariantInput: ProductVariantWhereUniqueInput!): ProductVariant!
-  checkout(where: CheckoutWhereUniqueInput!): Checkout!
-}
-
-input ProductWhereUniqueInput {
-  id: String
-}
-
-input ProductVariantWhereUniqueInput {
-  id: String
-}
-
-input CheckoutWhereUniqueInput {
-  id: String
-}
-
-type Mutation {
-  createProduct(createProductInput: ProductCreateInput!): Product!
-  updateProduct(updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput!): Product!
-  removeProduct(removeProductInput: ProductWhereUniqueInput!): Product!
-  createProductVariant(createProductVariantInput: ProductVariantCreateInput!): ProductVariant!
-  updateProductVariant(updateProductVariantInput: ProductVariantUpdateWithWhereUniqueWithoutProductInput!): ProductVariant!
-  removeProductVariant(productVariantWhereUniqueInput: ProductVariantWhereUniqueInput!): ProductVariant!
-  createCheckout(data: CheckoutCreateInput!): Checkout!
-  updateCheckout(data: CheckoutUpdateInput!, where: CheckoutWhereUniqueInput!): Checkout!
-  removeCheckout(where: CheckoutWhereUniqueInput!): Checkout!
-}
-
-input ProductCreateInput {
-  id: String
+type Country {
+  id: ID!
   name: String!
-  description: String
-  type: ProductType
-  productCategory: ProductCategoryCreateNestedOneWithoutProductsInput
-  productVariants: ProductVariantCreateNestedManyWithoutProductInput
-  taxRate: TaxRateCreateNestedOneWithoutProductsInput
-  createdAt: DateTime
-  updatedAt: DateTime
+  code: String!
 }
 
-input ProductCategoryCreateNestedOneWithoutProductsInput {
-  create: ProductCategoryCreateWithoutProductsInput
-  connectOrCreate: ProductCategoryCreateOrConnectWithoutProductsInput
-  connect: ProductCategoryWhereUniqueInput
-}
-
-input ProductCategoryCreateWithoutProductsInput {
-  name: String!
-  description: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductCategoryCreateOrConnectWithoutProductsInput {
-  where: ProductCategoryWhereUniqueInput!
-  create: ProductCategoryCreateWithoutProductsInput!
-}
-
-input ProductCategoryWhereUniqueInput {
-  id: Int
-}
-
-input ProductVariantCreateNestedManyWithoutProductInput {
-  create: [ProductVariantCreateWithoutProductInput!]
-  connectOrCreate: [ProductVariantCreateOrConnectWithoutProductInput!]
-  createMany: ProductVariantCreateManyProductInputEnvelope
-  connect: [ProductVariantWhereUniqueInput!]
-}
-
-input ProductVariantCreateWithoutProductInput {
-  id: String
-  name: String!
-  description: String
-  sku: String
-  weight: Decimal
-  available: Boolean
-  price: Decimal!
-  salePrice: Decimal
-  createdAt: DateTime
-  updatedAt: DateTime
-  CheckoutItem: CheckoutItemCreateNestedManyWithoutVariantInput
-}
-
-input CheckoutItemCreateNestedManyWithoutVariantInput {
-  create: [CheckoutItemCreateWithoutVariantInput!]
-  connectOrCreate: [CheckoutItemCreateOrConnectWithoutVariantInput!]
-  createMany: CheckoutItemCreateManyVariantInputEnvelope
-  connect: [CheckoutItemWhereUniqueInput!]
-}
-
-input CheckoutItemCreateWithoutVariantInput {
-  id: String
-  quantity: Int
-  checkout: CheckoutCreateNestedOneWithoutCheckoutItemInput!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CheckoutCreateNestedOneWithoutCheckoutItemInput {
-  create: CheckoutCreateWithoutCheckoutItemInput
-  connectOrCreate: CheckoutCreateOrConnectWithoutCheckoutItemInput
-  connect: CheckoutWhereUniqueInput
-}
-
-input CheckoutCreateWithoutCheckoutItemInput {
-  id: String
-  note: String
-  shippingAddress: AddressCreateNestedOneWithoutShippingAddressCheckoutInput
-  billingAddress: AddressCreateNestedOneWithoutBillingAddressCheckoutInput
-  shippingMethod: ShippingMethodCreateNestedOneWithoutCheckoutInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input AddressCreateNestedOneWithoutShippingAddressCheckoutInput {
-  create: AddressCreateWithoutShippingAddressCheckoutInput
-  connectOrCreate: AddressCreateOrConnectWithoutShippingAddressCheckoutInput
-  connect: AddressWhereUniqueInput
-}
-
-input AddressCreateWithoutShippingAddressCheckoutInput {
-  id: String
+type Address {
+  id: ID!
   firstName: String!
   lastName: String!
-  companyName: String
-  phone: String
-  vatNumber: String
   streetAddress: String!
   zipCode: String!
   city: String!
-  country: CountryCreateNestedOneWithoutAddressInput!
-  billingAddressCheckout: CheckoutCreateNestedManyWithoutBillingAddressInput
-  createdAt: DateTime
-  updatedAt: DateTime
+  country: Country!
+  phone: String
+  companyName: String
+  vatNumber: String
 }
 
-input CountryCreateNestedOneWithoutAddressInput {
-  create: CountryCreateWithoutAddressInput
-  connectOrCreate: CountryCreateOrConnectWithoutAddressInput
-  connect: CountryWhereUniqueInput
+type CheckoutItem {
+  id: ID!
+  quantity: Int!
+  variant: ProductVariant!
 }
 
-input CountryCreateWithoutAddressInput {
-  name: String!
-  code: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CountryCreateOrConnectWithoutAddressInput {
-  where: CountryWhereUniqueInput!
-  create: CountryCreateWithoutAddressInput!
-}
-
-input CountryWhereUniqueInput {
-  id: Int
-}
-
-input CheckoutCreateNestedManyWithoutBillingAddressInput {
-  create: [CheckoutCreateWithoutBillingAddressInput!]
-  connectOrCreate: [CheckoutCreateOrConnectWithoutBillingAddressInput!]
-  createMany: CheckoutCreateManyBillingAddressInputEnvelope
-  connect: [CheckoutWhereUniqueInput!]
-}
-
-input CheckoutCreateWithoutBillingAddressInput {
-  id: String
-  note: String
-  shippingAddress: AddressCreateNestedOneWithoutShippingAddressCheckoutInput
-  checkoutItem: CheckoutItemCreateNestedManyWithoutCheckoutInput
-  shippingMethod: ShippingMethodCreateNestedOneWithoutCheckoutInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CheckoutItemCreateNestedManyWithoutCheckoutInput {
-  create: [CheckoutItemCreateWithoutCheckoutInput!]
-  connectOrCreate: [CheckoutItemCreateOrConnectWithoutCheckoutInput!]
-  createMany: CheckoutItemCreateManyCheckoutInputEnvelope
-  connect: [CheckoutItemWhereUniqueInput!]
-}
-
-input CheckoutItemCreateWithoutCheckoutInput {
-  id: String
-  quantity: Int
-  variant: ProductVariantCreateNestedOneWithoutCheckoutItemInput!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductVariantCreateNestedOneWithoutCheckoutItemInput {
-  create: ProductVariantCreateWithoutCheckoutItemInput
-  connectOrCreate: ProductVariantCreateOrConnectWithoutCheckoutItemInput
-  connect: ProductVariantWhereUniqueInput
-}
-
-input ProductVariantCreateWithoutCheckoutItemInput {
-  id: String
-  name: String!
-  description: String
-  sku: String
-  weight: Decimal
-  available: Boolean
-  price: Decimal!
-  salePrice: Decimal
-  product: ProductCreateNestedOneWithoutProductVariantsInput!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductCreateNestedOneWithoutProductVariantsInput {
-  create: ProductCreateWithoutProductVariantsInput
-  connectOrCreate: ProductCreateOrConnectWithoutProductVariantsInput
-  connect: ProductWhereUniqueInput
-}
-
-input ProductCreateWithoutProductVariantsInput {
-  id: String
-  name: String!
-  description: String
-  type: ProductType
-  productCategory: ProductCategoryCreateNestedOneWithoutProductsInput
-  taxRate: TaxRateCreateNestedOneWithoutProductsInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TaxRateCreateNestedOneWithoutProductsInput {
-  create: TaxRateCreateWithoutProductsInput
-  connectOrCreate: TaxRateCreateOrConnectWithoutProductsInput
-  connect: TaxRateWhereUniqueInput
-}
-
-input TaxRateCreateWithoutProductsInput {
-  name: String!
-  description: String
-  rate: Decimal!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TaxRateCreateOrConnectWithoutProductsInput {
-  where: TaxRateWhereUniqueInput!
-  create: TaxRateCreateWithoutProductsInput!
-}
-
-input TaxRateWhereUniqueInput {
-  id: Int
-}
-
-input ProductCreateOrConnectWithoutProductVariantsInput {
-  where: ProductWhereUniqueInput!
-  create: ProductCreateWithoutProductVariantsInput!
-}
-
-input ProductVariantCreateOrConnectWithoutCheckoutItemInput {
-  where: ProductVariantWhereUniqueInput!
-  create: ProductVariantCreateWithoutCheckoutItemInput!
-}
-
-input CheckoutItemCreateOrConnectWithoutCheckoutInput {
-  where: CheckoutItemWhereUniqueInput!
-  create: CheckoutItemCreateWithoutCheckoutInput!
-}
-
-input CheckoutItemWhereUniqueInput {
-  id: String
-}
-
-input CheckoutItemCreateManyCheckoutInputEnvelope {
-  data: [CheckoutItemCreateManyCheckoutInput!]!
-  skipDuplicates: Boolean
-}
-
-input CheckoutItemCreateManyCheckoutInput {
-  id: String
-  quantity: Int
-  variantId: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ShippingMethodCreateNestedOneWithoutCheckoutInput {
-  create: ShippingMethodCreateWithoutCheckoutInput
-  connectOrCreate: ShippingMethodCreateOrConnectWithoutCheckoutInput
-  connect: ShippingMethodWhereUniqueInput
-}
-
-input ShippingMethodCreateWithoutCheckoutInput {
+type ShippingMethod {
+  id: ID!
   name: String!
   description: String
   minDeliveryDays: Int
   maxDeliveryDays: Int
   price: Decimal!
-  active: Boolean
+  active: Boolean!
 }
 
-input ShippingMethodCreateOrConnectWithoutCheckoutInput {
-  where: ShippingMethodWhereUniqueInput!
-  create: ShippingMethodCreateWithoutCheckoutInput!
-}
-
-input ShippingMethodWhereUniqueInput {
-  id: Int
-}
-
-input CheckoutCreateOrConnectWithoutBillingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  create: CheckoutCreateWithoutBillingAddressInput!
-}
-
-input CheckoutCreateManyBillingAddressInputEnvelope {
-  data: [CheckoutCreateManyBillingAddressInput!]!
-  skipDuplicates: Boolean
-}
-
-input CheckoutCreateManyBillingAddressInput {
-  id: String
+type Checkout {
+  id: ID!
   note: String
-  shippingAddressId: String
-  shippingMethodId: Int
-  createdAt: DateTime
-  updatedAt: DateTime
+  completed: Boolean!
+  items: [CheckoutItem!]
+  shippingAddress: Address
+  billingAddress: Address
+  shippingMethod: ShippingMethod
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-input AddressCreateOrConnectWithoutShippingAddressCheckoutInput {
-  where: AddressWhereUniqueInput!
-  create: AddressCreateWithoutShippingAddressCheckoutInput!
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TestEndpoint {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
-input AddressWhereUniqueInput {
-  id: String
+type Query {
+  products: [Product!]!
+  product(
+    """ID of the product"""
+    id: String!
+  ): Product!
+  checkout(
+    """ID of the checkout"""
+    id: String!
+  ): Checkout!
+  testEndpoint(id: Int!): TestEndpoint!
 }
 
-input AddressCreateNestedOneWithoutBillingAddressCheckoutInput {
-  create: AddressCreateWithoutBillingAddressCheckoutInput
-  connectOrCreate: AddressCreateOrConnectWithoutBillingAddressCheckoutInput
-  connect: AddressWhereUniqueInput
+type Mutation {
+  checkoutShippingAddressUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """Address with pre-defined country"""
+    address: CreateAddressInput!
+  ): Checkout!
+  checkoutBillingAddressUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """Address with pre-defined country"""
+    address: CreateAddressInput!
+  ): Checkout!
+  checkoutComplete(
+    """ID of the checkout"""
+    id: String!
+  ): Checkout!
+  createTestEndpoint(createTestEndpointInput: CreateTestEndpointInput!): TestEndpoint!
+  updateTestEndpoint(updateTestEndpointInput: UpdateTestEndpointInput!): TestEndpoint!
+  removeTestEndpoint(id: Int!): TestEndpoint!
 }
 
-input AddressCreateWithoutBillingAddressCheckoutInput {
-  id: String
+input CreateAddressInput {
   firstName: String!
   lastName: String!
-  companyName: String
-  phone: String
-  vatNumber: String
   streetAddress: String!
   zipCode: String!
   city: String!
-  country: CountryCreateNestedOneWithoutAddressInput!
-  shippingAddressCheckout: CheckoutCreateNestedManyWithoutShippingAddressInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CheckoutCreateNestedManyWithoutShippingAddressInput {
-  create: [CheckoutCreateWithoutShippingAddressInput!]
-  connectOrCreate: [CheckoutCreateOrConnectWithoutShippingAddressInput!]
-  createMany: CheckoutCreateManyShippingAddressInputEnvelope
-  connect: [CheckoutWhereUniqueInput!]
-}
-
-input CheckoutCreateWithoutShippingAddressInput {
-  id: String
-  note: String
-  billingAddress: AddressCreateNestedOneWithoutBillingAddressCheckoutInput
-  checkoutItem: CheckoutItemCreateNestedManyWithoutCheckoutInput
-  shippingMethod: ShippingMethodCreateNestedOneWithoutCheckoutInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CheckoutCreateOrConnectWithoutShippingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  create: CheckoutCreateWithoutShippingAddressInput!
-}
-
-input CheckoutCreateManyShippingAddressInputEnvelope {
-  data: [CheckoutCreateManyShippingAddressInput!]!
-  skipDuplicates: Boolean
-}
-
-input CheckoutCreateManyShippingAddressInput {
-  id: String
-  note: String
-  billingAddressId: String
-  shippingMethodId: Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input AddressCreateOrConnectWithoutBillingAddressCheckoutInput {
-  where: AddressWhereUniqueInput!
-  create: AddressCreateWithoutBillingAddressCheckoutInput!
-}
-
-input CheckoutCreateOrConnectWithoutCheckoutItemInput {
-  where: CheckoutWhereUniqueInput!
-  create: CheckoutCreateWithoutCheckoutItemInput!
-}
-
-input CheckoutItemCreateOrConnectWithoutVariantInput {
-  where: CheckoutItemWhereUniqueInput!
-  create: CheckoutItemCreateWithoutVariantInput!
-}
-
-input CheckoutItemCreateManyVariantInputEnvelope {
-  data: [CheckoutItemCreateManyVariantInput!]!
-  skipDuplicates: Boolean
-}
-
-input CheckoutItemCreateManyVariantInput {
-  id: String
-  quantity: Int
-  checkoutId: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductVariantCreateOrConnectWithoutProductInput {
-  where: ProductVariantWhereUniqueInput!
-  create: ProductVariantCreateWithoutProductInput!
-}
-
-input ProductVariantCreateManyProductInputEnvelope {
-  data: [ProductVariantCreateManyProductInput!]!
-  skipDuplicates: Boolean
-}
-
-input ProductVariantCreateManyProductInput {
-  id: String
-  name: String!
-  description: String
-  sku: String
-  weight: Decimal
-  available: Boolean
-  price: Decimal!
-  salePrice: Decimal
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductUpdateWithWhereUniqueWithoutTaxRateInput {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateWithoutTaxRateInput!
-}
-
-input ProductUpdateWithoutTaxRateInput {
-  id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  type: EnumProductTypeFieldUpdateOperationsInput
-  productCategory: ProductCategoryUpdateOneWithoutProductsNestedInput
-  productVariants: ProductVariantUpdateManyWithoutProductNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input StringFieldUpdateOperationsInput {
-  set: String
-}
-
-input NullableStringFieldUpdateOperationsInput {
-  set: String
-}
-
-input EnumProductTypeFieldUpdateOperationsInput {
-  set: ProductType
-}
-
-input ProductCategoryUpdateOneWithoutProductsNestedInput {
-  create: ProductCategoryCreateWithoutProductsInput
-  connectOrCreate: ProductCategoryCreateOrConnectWithoutProductsInput
-  upsert: ProductCategoryUpsertWithoutProductsInput
-  disconnect: Boolean
-  delete: Boolean
-  connect: ProductCategoryWhereUniqueInput
-  update: ProductCategoryUpdateWithoutProductsInput
-}
-
-input ProductCategoryUpsertWithoutProductsInput {
-  update: ProductCategoryUpdateWithoutProductsInput!
-  create: ProductCategoryCreateWithoutProductsInput!
-}
-
-input ProductCategoryUpdateWithoutProductsInput {
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input DateTimeFieldUpdateOperationsInput {
-  set: DateTime
-}
-
-input ProductVariantUpdateManyWithoutProductNestedInput {
-  create: [ProductVariantCreateWithoutProductInput!]
-  connectOrCreate: [ProductVariantCreateOrConnectWithoutProductInput!]
-  upsert: [ProductVariantUpsertWithWhereUniqueWithoutProductInput!]
-  createMany: ProductVariantCreateManyProductInputEnvelope
-  set: [ProductVariantWhereUniqueInput!]
-  disconnect: [ProductVariantWhereUniqueInput!]
-  delete: [ProductVariantWhereUniqueInput!]
-  connect: [ProductVariantWhereUniqueInput!]
-  update: [ProductVariantUpdateWithWhereUniqueWithoutProductInput!]
-  updateMany: [ProductVariantUpdateManyWithWhereWithoutProductInput!]
-  deleteMany: [ProductVariantScalarWhereInput!]
-}
-
-input ProductVariantUpsertWithWhereUniqueWithoutProductInput {
-  where: ProductVariantWhereUniqueInput!
-  update: ProductVariantUpdateWithoutProductInput!
-  create: ProductVariantCreateWithoutProductInput!
-}
-
-input ProductVariantUpdateWithoutProductInput {
-  id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  sku: NullableStringFieldUpdateOperationsInput
-  weight: NullableDecimalFieldUpdateOperationsInput
-  available: BoolFieldUpdateOperationsInput
-  price: DecimalFieldUpdateOperationsInput
-  salePrice: NullableDecimalFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  CheckoutItem: CheckoutItemUpdateManyWithoutVariantNestedInput
-}
-
-input NullableDecimalFieldUpdateOperationsInput {
-  set: Decimal
-  increment: Decimal
-  decrement: Decimal
-  multiply: Decimal
-  divide: Decimal
-}
-
-input BoolFieldUpdateOperationsInput {
-  set: Boolean
-}
-
-input DecimalFieldUpdateOperationsInput {
-  set: Decimal
-  increment: Decimal
-  decrement: Decimal
-  multiply: Decimal
-  divide: Decimal
-}
-
-input CheckoutItemUpdateManyWithoutVariantNestedInput {
-  create: [CheckoutItemCreateWithoutVariantInput!]
-  connectOrCreate: [CheckoutItemCreateOrConnectWithoutVariantInput!]
-  upsert: [CheckoutItemUpsertWithWhereUniqueWithoutVariantInput!]
-  createMany: CheckoutItemCreateManyVariantInputEnvelope
-  set: [CheckoutItemWhereUniqueInput!]
-  disconnect: [CheckoutItemWhereUniqueInput!]
-  delete: [CheckoutItemWhereUniqueInput!]
-  connect: [CheckoutItemWhereUniqueInput!]
-  update: [CheckoutItemUpdateWithWhereUniqueWithoutVariantInput!]
-  updateMany: [CheckoutItemUpdateManyWithWhereWithoutVariantInput!]
-  deleteMany: [CheckoutItemScalarWhereInput!]
-}
-
-input CheckoutItemUpsertWithWhereUniqueWithoutVariantInput {
-  where: CheckoutItemWhereUniqueInput!
-  update: CheckoutItemUpdateWithoutVariantInput!
-  create: CheckoutItemCreateWithoutVariantInput!
-}
-
-input CheckoutItemUpdateWithoutVariantInput {
-  id: StringFieldUpdateOperationsInput
-  quantity: IntFieldUpdateOperationsInput
-  checkout: CheckoutUpdateOneRequiredWithoutCheckoutItemNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input IntFieldUpdateOperationsInput {
-  set: Int
-  increment: Int
-  decrement: Int
-  multiply: Int
-  divide: Int
-}
-
-input CheckoutUpdateOneRequiredWithoutCheckoutItemNestedInput {
-  create: CheckoutCreateWithoutCheckoutItemInput
-  connectOrCreate: CheckoutCreateOrConnectWithoutCheckoutItemInput
-  upsert: CheckoutUpsertWithoutCheckoutItemInput
-  connect: CheckoutWhereUniqueInput
-  update: CheckoutUpdateWithoutCheckoutItemInput
-}
-
-input CheckoutUpsertWithoutCheckoutItemInput {
-  update: CheckoutUpdateWithoutCheckoutItemInput!
-  create: CheckoutCreateWithoutCheckoutItemInput!
-}
-
-input CheckoutUpdateWithoutCheckoutItemInput {
-  id: StringFieldUpdateOperationsInput
-  note: NullableStringFieldUpdateOperationsInput
-  shippingAddress: AddressUpdateOneWithoutShippingAddressCheckoutNestedInput
-  billingAddress: AddressUpdateOneWithoutBillingAddressCheckoutNestedInput
-  shippingMethod: ShippingMethodUpdateOneWithoutCheckoutNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input AddressUpdateOneWithoutShippingAddressCheckoutNestedInput {
-  create: AddressCreateWithoutShippingAddressCheckoutInput
-  connectOrCreate: AddressCreateOrConnectWithoutShippingAddressCheckoutInput
-  upsert: AddressUpsertWithoutShippingAddressCheckoutInput
-  disconnect: Boolean
-  delete: Boolean
-  connect: AddressWhereUniqueInput
-  update: AddressUpdateWithoutShippingAddressCheckoutInput
-}
-
-input AddressUpsertWithoutShippingAddressCheckoutInput {
-  update: AddressUpdateWithoutShippingAddressCheckoutInput!
-  create: AddressCreateWithoutShippingAddressCheckoutInput!
-}
-
-input AddressUpdateWithoutShippingAddressCheckoutInput {
-  id: StringFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  phone: NullableStringFieldUpdateOperationsInput
-  vatNumber: NullableStringFieldUpdateOperationsInput
-  streetAddress: StringFieldUpdateOperationsInput
-  zipCode: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: CountryUpdateOneRequiredWithoutAddressNestedInput
-  billingAddressCheckout: CheckoutUpdateManyWithoutBillingAddressNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CountryUpdateOneRequiredWithoutAddressNestedInput {
-  create: CountryCreateWithoutAddressInput
-  connectOrCreate: CountryCreateOrConnectWithoutAddressInput
-  upsert: CountryUpsertWithoutAddressInput
-  connect: CountryWhereUniqueInput
-  update: CountryUpdateWithoutAddressInput
-}
-
-input CountryUpsertWithoutAddressInput {
-  update: CountryUpdateWithoutAddressInput!
-  create: CountryCreateWithoutAddressInput!
-}
-
-input CountryUpdateWithoutAddressInput {
-  name: StringFieldUpdateOperationsInput
-  code: StringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CheckoutUpdateManyWithoutBillingAddressNestedInput {
-  create: [CheckoutCreateWithoutBillingAddressInput!]
-  connectOrCreate: [CheckoutCreateOrConnectWithoutBillingAddressInput!]
-  upsert: [CheckoutUpsertWithWhereUniqueWithoutBillingAddressInput!]
-  createMany: CheckoutCreateManyBillingAddressInputEnvelope
-  set: [CheckoutWhereUniqueInput!]
-  disconnect: [CheckoutWhereUniqueInput!]
-  delete: [CheckoutWhereUniqueInput!]
-  connect: [CheckoutWhereUniqueInput!]
-  update: [CheckoutUpdateWithWhereUniqueWithoutBillingAddressInput!]
-  updateMany: [CheckoutUpdateManyWithWhereWithoutBillingAddressInput!]
-  deleteMany: [CheckoutScalarWhereInput!]
-}
-
-input CheckoutUpsertWithWhereUniqueWithoutBillingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  update: CheckoutUpdateWithoutBillingAddressInput!
-  create: CheckoutCreateWithoutBillingAddressInput!
-}
-
-input CheckoutUpdateWithoutBillingAddressInput {
-  id: StringFieldUpdateOperationsInput
-  note: NullableStringFieldUpdateOperationsInput
-  shippingAddress: AddressUpdateOneWithoutShippingAddressCheckoutNestedInput
-  checkoutItem: CheckoutItemUpdateManyWithoutCheckoutNestedInput
-  shippingMethod: ShippingMethodUpdateOneWithoutCheckoutNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CheckoutItemUpdateManyWithoutCheckoutNestedInput {
-  create: [CheckoutItemCreateWithoutCheckoutInput!]
-  connectOrCreate: [CheckoutItemCreateOrConnectWithoutCheckoutInput!]
-  upsert: [CheckoutItemUpsertWithWhereUniqueWithoutCheckoutInput!]
-  createMany: CheckoutItemCreateManyCheckoutInputEnvelope
-  set: [CheckoutItemWhereUniqueInput!]
-  disconnect: [CheckoutItemWhereUniqueInput!]
-  delete: [CheckoutItemWhereUniqueInput!]
-  connect: [CheckoutItemWhereUniqueInput!]
-  update: [CheckoutItemUpdateWithWhereUniqueWithoutCheckoutInput!]
-  updateMany: [CheckoutItemUpdateManyWithWhereWithoutCheckoutInput!]
-  deleteMany: [CheckoutItemScalarWhereInput!]
-}
-
-input CheckoutItemUpsertWithWhereUniqueWithoutCheckoutInput {
-  where: CheckoutItemWhereUniqueInput!
-  update: CheckoutItemUpdateWithoutCheckoutInput!
-  create: CheckoutItemCreateWithoutCheckoutInput!
-}
-
-input CheckoutItemUpdateWithoutCheckoutInput {
-  id: StringFieldUpdateOperationsInput
-  quantity: IntFieldUpdateOperationsInput
-  variant: ProductVariantUpdateOneRequiredWithoutCheckoutItemNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input ProductVariantUpdateOneRequiredWithoutCheckoutItemNestedInput {
-  create: ProductVariantCreateWithoutCheckoutItemInput
-  connectOrCreate: ProductVariantCreateOrConnectWithoutCheckoutItemInput
-  upsert: ProductVariantUpsertWithoutCheckoutItemInput
-  connect: ProductVariantWhereUniqueInput
-  update: ProductVariantUpdateWithoutCheckoutItemInput
-}
-
-input ProductVariantUpsertWithoutCheckoutItemInput {
-  update: ProductVariantUpdateWithoutCheckoutItemInput!
-  create: ProductVariantCreateWithoutCheckoutItemInput!
-}
-
-input ProductVariantUpdateWithoutCheckoutItemInput {
-  id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  sku: NullableStringFieldUpdateOperationsInput
-  weight: NullableDecimalFieldUpdateOperationsInput
-  available: BoolFieldUpdateOperationsInput
-  price: DecimalFieldUpdateOperationsInput
-  salePrice: NullableDecimalFieldUpdateOperationsInput
-  product: ProductUpdateOneRequiredWithoutProductVariantsNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input ProductUpdateOneRequiredWithoutProductVariantsNestedInput {
-  create: ProductCreateWithoutProductVariantsInput
-  connectOrCreate: ProductCreateOrConnectWithoutProductVariantsInput
-  upsert: ProductUpsertWithoutProductVariantsInput
-  connect: ProductWhereUniqueInput
-  update: ProductUpdateWithoutProductVariantsInput
-}
-
-input ProductUpsertWithoutProductVariantsInput {
-  update: ProductUpdateWithoutProductVariantsInput!
-  create: ProductCreateWithoutProductVariantsInput!
-}
-
-input ProductUpdateWithoutProductVariantsInput {
-  id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  type: EnumProductTypeFieldUpdateOperationsInput
-  productCategory: ProductCategoryUpdateOneWithoutProductsNestedInput
-  taxRate: TaxRateUpdateOneWithoutProductsNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input TaxRateUpdateOneWithoutProductsNestedInput {
-  create: TaxRateCreateWithoutProductsInput
-  connectOrCreate: TaxRateCreateOrConnectWithoutProductsInput
-  upsert: TaxRateUpsertWithoutProductsInput
-  disconnect: Boolean
-  delete: Boolean
-  connect: TaxRateWhereUniqueInput
-  update: TaxRateUpdateWithoutProductsInput
-}
-
-input TaxRateUpsertWithoutProductsInput {
-  update: TaxRateUpdateWithoutProductsInput!
-  create: TaxRateCreateWithoutProductsInput!
-}
-
-input TaxRateUpdateWithoutProductsInput {
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  rate: DecimalFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CheckoutItemUpdateWithWhereUniqueWithoutCheckoutInput {
-  where: CheckoutItemWhereUniqueInput!
-  data: CheckoutItemUpdateWithoutCheckoutInput!
-}
-
-input CheckoutItemUpdateManyWithWhereWithoutCheckoutInput {
-  where: CheckoutItemScalarWhereInput!
-  data: CheckoutItemUpdateManyMutationInput!
-}
-
-input CheckoutItemScalarWhereInput {
-  AND: [CheckoutItemScalarWhereInput!]
-  OR: [CheckoutItemScalarWhereInput!]
-  NOT: [CheckoutItemScalarWhereInput!]
-  id: StringFilter
-  quantity: IntFilter
-  variantId: StringFilter
-  checkoutId: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-}
-
-input StringFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringFilter
-}
-
-enum QueryMode {
-  default
-  insensitive
-}
-
-input NestedStringFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringFilter
-}
-
-input IntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: NestedIntFilter
-}
-
-input NestedIntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: NestedIntFilter
-}
-
-input DateTimeFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: NestedDateTimeFilter
-}
-
-input NestedDateTimeFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: NestedDateTimeFilter
-}
-
-input CheckoutItemUpdateManyMutationInput {
-  id: StringFieldUpdateOperationsInput
-  quantity: IntFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input ShippingMethodUpdateOneWithoutCheckoutNestedInput {
-  create: ShippingMethodCreateWithoutCheckoutInput
-  connectOrCreate: ShippingMethodCreateOrConnectWithoutCheckoutInput
-  upsert: ShippingMethodUpsertWithoutCheckoutInput
-  disconnect: Boolean
-  delete: Boolean
-  connect: ShippingMethodWhereUniqueInput
-  update: ShippingMethodUpdateWithoutCheckoutInput
-}
-
-input ShippingMethodUpsertWithoutCheckoutInput {
-  update: ShippingMethodUpdateWithoutCheckoutInput!
-  create: ShippingMethodCreateWithoutCheckoutInput!
-}
-
-input ShippingMethodUpdateWithoutCheckoutInput {
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  minDeliveryDays: NullableIntFieldUpdateOperationsInput
-  maxDeliveryDays: NullableIntFieldUpdateOperationsInput
-  price: DecimalFieldUpdateOperationsInput
-  active: BoolFieldUpdateOperationsInput
-}
-
-input NullableIntFieldUpdateOperationsInput {
-  set: Int
-  increment: Int
-  decrement: Int
-  multiply: Int
-  divide: Int
-}
-
-input CheckoutUpdateWithWhereUniqueWithoutBillingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  data: CheckoutUpdateWithoutBillingAddressInput!
-}
-
-input CheckoutUpdateManyWithWhereWithoutBillingAddressInput {
-  where: CheckoutScalarWhereInput!
-  data: CheckoutUpdateManyMutationInput!
-}
-
-input CheckoutScalarWhereInput {
-  AND: [CheckoutScalarWhereInput!]
-  OR: [CheckoutScalarWhereInput!]
-  NOT: [CheckoutScalarWhereInput!]
-  id: StringFilter
-  note: StringNullableFilter
-  shippingAddressId: StringNullableFilter
-  billingAddressId: StringNullableFilter
-  shippingMethodId: IntNullableFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-}
-
-input NestedStringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringNullableFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: NestedIntNullableFilter
-}
-
-input NestedIntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: NestedIntNullableFilter
-}
-
-input CheckoutUpdateManyMutationInput {
-  id: StringFieldUpdateOperationsInput
-  note: NullableStringFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input AddressUpdateOneWithoutBillingAddressCheckoutNestedInput {
-  create: AddressCreateWithoutBillingAddressCheckoutInput
-  connectOrCreate: AddressCreateOrConnectWithoutBillingAddressCheckoutInput
-  upsert: AddressUpsertWithoutBillingAddressCheckoutInput
-  disconnect: Boolean
-  delete: Boolean
-  connect: AddressWhereUniqueInput
-  update: AddressUpdateWithoutBillingAddressCheckoutInput
-}
-
-input AddressUpsertWithoutBillingAddressCheckoutInput {
-  update: AddressUpdateWithoutBillingAddressCheckoutInput!
-  create: AddressCreateWithoutBillingAddressCheckoutInput!
-}
-
-input AddressUpdateWithoutBillingAddressCheckoutInput {
-  id: StringFieldUpdateOperationsInput
-  firstName: StringFieldUpdateOperationsInput
-  lastName: StringFieldUpdateOperationsInput
-  companyName: NullableStringFieldUpdateOperationsInput
-  phone: NullableStringFieldUpdateOperationsInput
-  vatNumber: NullableStringFieldUpdateOperationsInput
-  streetAddress: StringFieldUpdateOperationsInput
-  zipCode: StringFieldUpdateOperationsInput
-  city: StringFieldUpdateOperationsInput
-  country: CountryUpdateOneRequiredWithoutAddressNestedInput
-  shippingAddressCheckout: CheckoutUpdateManyWithoutShippingAddressNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CheckoutUpdateManyWithoutShippingAddressNestedInput {
-  create: [CheckoutCreateWithoutShippingAddressInput!]
-  connectOrCreate: [CheckoutCreateOrConnectWithoutShippingAddressInput!]
-  upsert: [CheckoutUpsertWithWhereUniqueWithoutShippingAddressInput!]
-  createMany: CheckoutCreateManyShippingAddressInputEnvelope
-  set: [CheckoutWhereUniqueInput!]
-  disconnect: [CheckoutWhereUniqueInput!]
-  delete: [CheckoutWhereUniqueInput!]
-  connect: [CheckoutWhereUniqueInput!]
-  update: [CheckoutUpdateWithWhereUniqueWithoutShippingAddressInput!]
-  updateMany: [CheckoutUpdateManyWithWhereWithoutShippingAddressInput!]
-  deleteMany: [CheckoutScalarWhereInput!]
-}
-
-input CheckoutUpsertWithWhereUniqueWithoutShippingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  update: CheckoutUpdateWithoutShippingAddressInput!
-  create: CheckoutCreateWithoutShippingAddressInput!
-}
-
-input CheckoutUpdateWithoutShippingAddressInput {
-  id: StringFieldUpdateOperationsInput
-  note: NullableStringFieldUpdateOperationsInput
-  billingAddress: AddressUpdateOneWithoutBillingAddressCheckoutNestedInput
-  checkoutItem: CheckoutItemUpdateManyWithoutCheckoutNestedInput
-  shippingMethod: ShippingMethodUpdateOneWithoutCheckoutNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input CheckoutUpdateWithWhereUniqueWithoutShippingAddressInput {
-  where: CheckoutWhereUniqueInput!
-  data: CheckoutUpdateWithoutShippingAddressInput!
-}
-
-input CheckoutUpdateManyWithWhereWithoutShippingAddressInput {
-  where: CheckoutScalarWhereInput!
-  data: CheckoutUpdateManyMutationInput!
-}
-
-input CheckoutItemUpdateWithWhereUniqueWithoutVariantInput {
-  where: CheckoutItemWhereUniqueInput!
-  data: CheckoutItemUpdateWithoutVariantInput!
-}
-
-input CheckoutItemUpdateManyWithWhereWithoutVariantInput {
-  where: CheckoutItemScalarWhereInput!
-  data: CheckoutItemUpdateManyMutationInput!
-}
-
-input ProductVariantUpdateWithWhereUniqueWithoutProductInput {
-  where: ProductVariantWhereUniqueInput!
-  data: ProductVariantUpdateWithoutProductInput!
-}
-
-input ProductVariantUpdateManyWithWhereWithoutProductInput {
-  where: ProductVariantScalarWhereInput!
-  data: ProductVariantUpdateManyMutationInput!
-}
-
-input ProductVariantScalarWhereInput {
-  AND: [ProductVariantScalarWhereInput!]
-  OR: [ProductVariantScalarWhereInput!]
-  NOT: [ProductVariantScalarWhereInput!]
-  id: StringFilter
-  name: StringFilter
-  description: StringNullableFilter
-  sku: StringNullableFilter
-  weight: DecimalNullableFilter
-  available: BoolFilter
-  price: DecimalFilter
-  salePrice: DecimalNullableFilter
-  productId: StringFilter
-  createdAt: DateTimeFilter
-  updatedAt: DateTimeFilter
-}
-
-input DecimalNullableFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: NestedDecimalNullableFilter
-}
-
-input NestedDecimalNullableFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: NestedDecimalNullableFilter
-}
-
-input BoolFilter {
-  equals: Boolean
-  not: NestedBoolFilter
-}
-
-input NestedBoolFilter {
-  equals: Boolean
-  not: NestedBoolFilter
-}
-
-input DecimalFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: NestedDecimalFilter
-}
-
-input NestedDecimalFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: NestedDecimalFilter
-}
 
-input ProductVariantUpdateManyMutationInput {
-  id: StringFieldUpdateOperationsInput
-  name: StringFieldUpdateOperationsInput
-  description: NullableStringFieldUpdateOperationsInput
-  sku: NullableStringFieldUpdateOperationsInput
-  weight: NullableDecimalFieldUpdateOperationsInput
-  available: BoolFieldUpdateOperationsInput
-  price: DecimalFieldUpdateOperationsInput
-  salePrice: NullableDecimalFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
+  """Pre-defined country"""
+  country: CountryInput!
+  companyName: String
+  vatNumber: String
 }
 
-input ProductVariantCreateInput {
-  id: String
-  name: String!
-  description: String
-  sku: String
-  weight: Decimal
-  available: Boolean
-  price: Decimal!
-  salePrice: Decimal
-  product: ProductCreateNestedOneWithoutProductVariantsInput!
-  createdAt: DateTime
-  updatedAt: DateTime
-  CheckoutItem: CheckoutItemCreateNestedManyWithoutVariantInput
+input CountryInput {
+  code: String!
+  name: String
 }
 
-input CheckoutCreateInput {
-  id: String
-  note: String
-  shippingAddress: AddressCreateNestedOneWithoutShippingAddressCheckoutInput
-  billingAddress: AddressCreateNestedOneWithoutBillingAddressCheckoutInput
-  checkoutItem: CheckoutItemCreateNestedManyWithoutCheckoutInput
-  shippingMethod: ShippingMethodCreateNestedOneWithoutCheckoutInput
-  createdAt: DateTime
-  updatedAt: DateTime
+input CreateTestEndpointInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
-input CheckoutUpdateInput {
-  id: StringFieldUpdateOperationsInput
-  note: NullableStringFieldUpdateOperationsInput
-  shippingAddress: AddressUpdateOneWithoutShippingAddressCheckoutNestedInput
-  billingAddress: AddressUpdateOneWithoutBillingAddressCheckoutNestedInput
-  checkoutItem: CheckoutItemUpdateManyWithoutCheckoutNestedInput
-  shippingMethod: ShippingMethodUpdateOneWithoutCheckoutNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
+input UpdateTestEndpointInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

@@ -1,34 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { ProductCreateInput } from 'src/@generated/product/product-create.input';
-import { ProductUpdateWithWhereUniqueWithoutTaxRateInput } from 'src/@generated/product/product-update-with-where-unique-without-tax-rate.input';
-import { ProductWhereUniqueInput } from 'src/@generated/product/product-where-unique.input';
-import { Product } from 'src/@generated/product/product.model';
+import { Product } from '@prisma/client';
+import { UserInputError } from 'apollo-server-express';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FindProductArgs } from './dto/find-product.args';
 
 @Injectable()
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createProductInput: ProductCreateInput): Promise<Product> {
-    return this.prisma.product.create({ data: createProductInput });
-  }
-
-  findAll() {
-    return this.prisma.product.findMany({ include: { productVariants: true } });
-  }
-
-  findOne(productWhereUniqueInput: ProductWhereUniqueInput) {
-    return this.prisma.product.findUnique({
-      where: productWhereUniqueInput,
-      include: { productVariants: true },
+  async findAll(): Promise<Product[]> {
+    const products = await this.prisma.product.findMany({
+      include: { categories: true, variants: true, taxRate: true },
     });
+
+    return products;
   }
 
-  update(updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput) {
-    return this.prisma.product.update(updateProductInput);
-  }
+  async findOne(findProductArgs: FindProductArgs): Promise<Product> {
+    const product = await this.prisma.product.findUnique({
+      where: { id: findProductArgs.id },
+      include: { categories: true, variants: true, taxRate: true },
+    });
 
-  remove(productWhereUniqueInput: ProductWhereUniqueInput) {
-    return this.prisma.product.delete({ where: productWhereUniqueInput });
+    if (!product) {
+      throw new UserInputError('Invalid product ID');
+    }
+
+    return product;
   }
 }

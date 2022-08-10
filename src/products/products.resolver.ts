@@ -1,47 +1,25 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { CreateProductArgs } from './dto/create-product.args';
+import { FindProductArgs } from './dto/find-product.args';
+import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
-import { ProductCreateInput } from 'src/@generated/product/product-create.input';
-import { Product } from 'src/@generated/product/product.model';
-import { ProductWhereUniqueInput } from 'src/@generated/product/product-where-unique.input';
-import { ProductUpdateWithWhereUniqueWithoutTaxRateInput } from 'src/@generated/product/product-update-with-where-unique-without-tax-rate.input';
 
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Mutation(() => Product)
-  createProduct(
-    @Args('createProductInput') createProductInput: ProductCreateInput,
-  ) {
-    return this.productsService.create(createProductInput);
-  }
-
   @Query(() => [Product], { name: 'products' })
-  findAll() {
+  findAllProducts() {
     return this.productsService.findAll();
   }
 
   @Query(() => Product, { name: 'product' })
-  findOne(
-    @Args('productWhereUniqueInput')
-    productWhereUniqueInput: ProductWhereUniqueInput,
-  ) {
-    return this.productsService.findOne(productWhereUniqueInput);
+  findProduct(@Args() findProductArgs: FindProductArgs) {
+    return this.productsService.findOne(findProductArgs);
   }
 
-  @Mutation(() => Product)
-  updateProduct(
-    @Args('updateProductInput')
-    updateProductInput: ProductUpdateWithWhereUniqueWithoutTaxRateInput,
-  ) {
-    return this.productsService.update(updateProductInput);
-  }
-
-  @Mutation(() => Product)
-  removeProduct(
-    @Args('removeProductInput')
-    removeProductInput: ProductWhereUniqueInput,
-  ) {
-    return this.productsService.remove(removeProductInput);
-  }
+  /*@Mutation(() => Product)
+  createProduct(@Args() createProductInput: CreateProductArgs) {
+    return null;
+  }*/
 }

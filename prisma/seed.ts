@@ -3,11 +3,22 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.product.deleteMany();
+  await prisma.productVariant.deleteMany();
+  await prisma.country.deleteMany();
+
+  const country = await prisma.country.create({
+    data: {
+      name: 'Slovenia',
+      code: 'SI',
+    },
+  });
+
   const product = await prisma.product.create({
     data: {
       name: 'T-Shirt',
       description: 'Great T-Shirt',
-      productVariants: {
+      variants: {
         create: [
           {
             name: 'Black color',
@@ -20,6 +31,7 @@ async function main() {
     },
   });
 
+  console.log(country);
   console.log(product);
 }
 

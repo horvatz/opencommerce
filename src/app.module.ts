@@ -6,8 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ProductVariantsModule } from './product-variants/product-variants.module';
 import { CheckoutModule } from './checkout/checkout.module';
+import { TestEndpointModule } from './test-endpoint/test-endpoint.module';
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { CheckoutModule } from './checkout/checkout.module';
     }),
     ProductsModule,
     PrismaModule,
-    ProductVariantsModule,
     CheckoutModule,
+    TestEndpointModule,
   ],
   controllers: [AppController],
   providers: [AppService],

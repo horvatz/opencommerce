@@ -1,39 +1,42 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { CheckoutService } from './checkout.service';
-import { CreateOneCheckoutArgs } from 'src/@generated/checkout/create-one-checkout.args';
-import { FindUniqueCheckoutArgs } from 'src/@generated/checkout/find-unique-checkout.args';
-import { UpdateOneCheckoutArgs } from 'src/@generated/checkout/update-one-checkout.args';
-import { Checkout } from 'src/@generated/checkout/checkout.model';
+import { FindCheckoutArgs } from './dto/find-checkout.args';
+import { UpdateCheckoutAddressArgs } from './dto/update-checkout-address.args';
+import { Checkout } from './entities/checkout.entity';
 
 @Resolver(() => Checkout)
 export class CheckoutResolver {
   constructor(private readonly checkoutService: CheckoutService) {}
 
-  @Mutation(() => Checkout)
+  // TODO implement create
+  /*@Mutation(() => Checkout)
   createCheckout(@Args() createCheckoutInput: CreateOneCheckoutArgs) {
     return this.checkoutService.create(createCheckoutInput);
-  }
-
-  @Query(() => [Checkout], { name: 'checkout' })
-  findAll() {
-    return this.checkoutService.findAll();
-  }
+  }*/
 
   @Query(() => Checkout, { name: 'checkout' })
-  findOne(
-    @Args()
-    findUniqueCheckoutInput: FindUniqueCheckoutArgs,
+  findCheckout(@Args() findCheckoutArgs: FindCheckoutArgs) {
+    return this.checkoutService.findOne(findCheckoutArgs);
+  }
+
+  @Mutation(() => Checkout)
+  checkoutShippingAddressUpdate(
+    @Args() updateCheckoutAddressArgs: UpdateCheckoutAddressArgs,
   ) {
-    return this.checkoutService.findOne(findUniqueCheckoutInput);
+    return this.checkoutService.shippingAddressUpdate(
+      updateCheckoutAddressArgs,
+    );
   }
 
   @Mutation(() => Checkout)
-  updateCheckout(@Args() updateCheckoutInput: UpdateOneCheckoutArgs) {
-    return this.checkoutService.update(updateCheckoutInput);
+  checkoutBillingAddressUpdate(
+    @Args() updateCheckoutAddressArgs: UpdateCheckoutAddressArgs,
+  ) {
+    return this.checkoutService.billingAddressUpdate(updateCheckoutAddressArgs);
   }
 
   @Mutation(() => Checkout)
-  removeCheckout(@Args() removeCheckoutInput: FindUniqueCheckoutArgs) {
-    return this.checkoutService.remove(removeCheckoutInput);
+  checkoutComplete(@Args() completeCheckoutArgs: FindCheckoutArgs) {
+    return this.checkoutService.complete(completeCheckoutArgs);
   }
 }
