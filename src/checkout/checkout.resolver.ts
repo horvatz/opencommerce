@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { CheckoutService } from './checkout.service';
-import { FindCheckoutArgs } from './dto/find-checkout.args';
-import { UpdateCheckoutAddressArgs } from './dto/update-checkout-address.args';
+import { FindCheckoutArgs } from './dto/args/find-checkout.args';
+import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
 import { Checkout } from './entities/checkout.entity';
 
 @Resolver(() => Checkout)

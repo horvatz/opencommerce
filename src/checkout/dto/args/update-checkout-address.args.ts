@@ -1,6 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import { CreateAddressInput } from './create-address.input';
+import { CreateAddressInput } from '../input/create-address.input';
 
 @ArgsType()
 export class UpdateCheckoutAddressArgs {

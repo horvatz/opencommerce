@@ -1,6 +1,7 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { CreateProductArgs } from './dto/create-product.args';
-import { FindProductArgs } from './dto/find-product.args';
+import { CreateProductArgs } from './dto/args/create-product.args';
+import { FindProductArgs } from './dto/args/find-product.args';
+import { UpdateProductArgs } from './dto/args/update-product.args';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 
@@ -18,8 +19,13 @@ export class ProductsResolver {
     return this.productsService.findOne(findProductArgs);
   }
 
-  /*@Mutation(() => Product)
-  createProduct(@Args() createProductInput: CreateProductArgs) {
-    return null;
-  }*/
+  @Mutation(() => Product)
+  productCreate(@Args() createProductArgs: CreateProductArgs) {
+    return this.productsService.create(createProductArgs);
+  }
+
+  @Mutation(() => Product)
+  productUpdate(@Args() updateProductArgs: UpdateProductArgs) {
+    return this.productsService.update(updateProductArgs);
+  }
 }

@@ -115,6 +115,14 @@ type Query {
 }
 
 type Mutation {
+  productCreate(product: CreateProductInput!): Product!
+  productUpdate(
+    """ID of the product"""
+    id: String!
+
+    """Address with pre-defined country"""
+    product: UpdateProductInput!
+  ): Product!
   checkoutShippingAddressUpdate(
     """ID of the checkout"""
     id: String!
@@ -136,6 +144,50 @@ type Mutation {
   createTestEndpoint(createTestEndpointInput: CreateTestEndpointInput!): TestEndpoint!
   updateTestEndpoint(updateTestEndpointInput: UpdateTestEndpointInput!): TestEndpoint!
   removeTestEndpoint(id: Int!): TestEndpoint!
+}
+
+input CreateProductInput {
+  name: String!
+  description: String
+
+  """Type of the product (default is REGULAR), can also be DIGITAL"""
+  type: ProductType
+  categories: [FindProductCategoryInput!]
+  variants: [CreateProductVariantWithProductInput!]
+  taxRate: FindTaxRateInput
+}
+
+input FindProductCategoryInput {
+  id: Int!
+  name: String
+}
+
+input CreateProductVariantWithProductInput {
+  name: String!
+  description: String
+  sku: String
+  weight: Decimal
+  available: Boolean
+  price: Decimal!
+  salePrice: Decimal
+}
+
+input FindTaxRateInput {
+  id: Int!
+  name: String
+  description: String
+  rate: Decimal
+}
+
+input UpdateProductInput {
+  name: String
+  description: String
+
+  """Type of the product (default is REGULAR), can also be DIGITAL"""
+  type: ProductType
+  categories: [FindProductCategoryInput!]
+  variants: [CreateProductVariantWithProductInput!]
+  taxRate: FindTaxRateInput
 }
 
 input CreateAddressInput {

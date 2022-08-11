@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Checkout } from '@prisma/client';
 import { UserInputError } from 'apollo-server-express';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { FindCheckoutArgs } from './dto/find-checkout.args';
-import { UpdateCheckoutAddressArgs } from './dto/update-checkout-address.args';
+import { FindCheckoutArgs } from './dto/args/find-checkout.args';
+import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
 
 @Injectable()
 export class CheckoutService {

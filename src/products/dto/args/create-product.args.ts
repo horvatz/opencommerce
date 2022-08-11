@@ -1,6 +1,6 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 import { Type } from 'class-transformer';
-import { CreateProductInput } from './create-product.input';
+import { CreateProductInput } from '../input/create-product.input';
 
 @ArgsType()
 export class CreateProductArgs {
