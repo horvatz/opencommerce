@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { ProductVariant } from 'src/products/entities/product-variant.entity';
+import { ProductVariant } from 'src/product-variants/entities/product-variant.entity';
 
 @ObjectType()
 export class CheckoutItem {

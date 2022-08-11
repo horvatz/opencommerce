@@ -8,6 +8,7 @@ import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { TestEndpointModule } from './test-endpoint/test-endpoint.module';
+import { ProductVariantsModule } from './product-variants/product-variants.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TestEndpointModule } from './test-endpoint/test-endpoint.module';
     PrismaModule,
     CheckoutModule,
     TestEndpointModule,
+    ProductVariantsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

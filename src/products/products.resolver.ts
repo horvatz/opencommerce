@@ -28,4 +28,9 @@ export class ProductsResolver {
   productUpdate(@Args() updateProductArgs: UpdateProductArgs) {
     return this.productsService.update(updateProductArgs);
   }
+
+  @Mutation(() => Product)
+  productRemove(@Args() removeProductArgs: FindProductArgs) {
+    return this.productsService.delete(removeProductArgs);
+  }
 }

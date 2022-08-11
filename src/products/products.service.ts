@@ -100,4 +100,22 @@ export class ProductsService {
       }
     }
   }
+
+  async delete(deleteProductArgs: FindProductArgs): Promise<Product> {
+    const { id } = deleteProductArgs;
+
+    try {
+      const product = await this.prisma.product.delete({
+        where: { id },
+      });
+      return product;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid product ID');
+        }
+        throw error;
+      }
+    }
+  }
 }

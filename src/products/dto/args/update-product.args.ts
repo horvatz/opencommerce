@@ -9,7 +9,7 @@ export class UpdateProductArgs {
 
   @Field(() => UpdateProductInput, {
     nullable: false,
-    description: 'Address with pre-defined country',
+    description: 'Product data to update',
   })
   @Type(() => UpdateProductInput)
   product!: UpdateProductInput;

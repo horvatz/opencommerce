@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { ProductType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsEnum } from 'class-validator';
-import { CreateProductVariantWithProductInput } from './create-product-variant-with-product.input';
+import { CreateProductVariantWithProductInput } from '../../../product-variants/dto/input/create-product-variant-with-product.input';
 import { FindProductCategoryInput } from './find-product-category.input';
 import { FindTaxRateInput } from './find-tax-rate.input';
 

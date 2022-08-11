@@ -112,6 +112,10 @@ type Query {
     id: String!
   ): Checkout!
   testEndpoint(id: Int!): TestEndpoint!
+  productVariant(
+    """ID of the product variant"""
+    id: String!
+  ): ProductVariant!
 }
 
 type Mutation {
@@ -120,8 +124,12 @@ type Mutation {
     """ID of the product"""
     id: String!
 
-    """Address with pre-defined country"""
+    """Product data to update"""
     product: UpdateProductInput!
+  ): Product!
+  productRemove(
+    """ID of the product"""
+    id: String!
   ): Product!
   checkoutShippingAddressUpdate(
     """ID of the checkout"""
@@ -144,6 +152,18 @@ type Mutation {
   createTestEndpoint(createTestEndpointInput: CreateTestEndpointInput!): TestEndpoint!
   updateTestEndpoint(updateTestEndpointInput: UpdateTestEndpointInput!): TestEndpoint!
   removeTestEndpoint(id: Int!): TestEndpoint!
+  productVariantCreate(productId: String!, variant: CreateProductVariantWithProductInput!): ProductVariant!
+  productVariantUpdate(
+    """ID of the product variant"""
+    id: String!
+
+    """Product variant data to update"""
+    variant: UpdateProductVariantWithProductInput!
+  ): ProductVariant!
+  productVariantRemove(
+    """ID of the product variant"""
+    id: String!
+  ): ProductVariant!
 }
 
 input CreateProductInput {
@@ -217,4 +237,14 @@ input UpdateTestEndpointInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input UpdateProductVariantWithProductInput {
+  name: String
+  description: String
+  sku: String
+  weight: Decimal
+  available: Boolean
+  price: Decimal
+  salePrice: Decimal
 }
