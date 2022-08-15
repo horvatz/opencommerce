@@ -103,11 +103,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type TestEndpoint {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Query {
   products: [Product!]!
   product(
@@ -118,11 +113,12 @@ type Query {
     """ID of the checkout"""
     id: String!
   ): Checkout!
-  testEndpoint(id: Int!): TestEndpoint!
   productVariant(
     """ID of the product variant"""
     id: String!
   ): ProductVariant!
+  productCategories: [ProductCategory!]!
+  productCategory(id: Int!): ProductCategory!
 }
 
 type Mutation {
@@ -156,9 +152,6 @@ type Mutation {
     """ID of the checkout"""
     id: String!
   ): Checkout!
-  createTestEndpoint(createTestEndpointInput: CreateTestEndpointInput!): TestEndpoint!
-  updateTestEndpoint(updateTestEndpointInput: UpdateTestEndpointInput!): TestEndpoint!
-  removeTestEndpoint(id: Int!): TestEndpoint!
   productVariantCreate(productId: String!, variant: CreateProductVariantWithProductInput!): ProductVariant!
   productVariantUpdate(
     """ID of the product variant"""
@@ -179,6 +172,9 @@ type Mutation {
     """ID of the product variant media"""
     mediaId: String!
   ): ProductVariant!
+  createProductCategory(createProductCategoryInput: CreateProductCategoryInput!): ProductCategory!
+  updateProductCategory(updateProductCategoryInput: UpdateProductCategoryInput!): ProductCategory!
+  removeProductCategory(id: Int!): ProductCategory!
 }
 
 input CreateProductInput {
@@ -243,17 +239,6 @@ input CountryInput {
   name: String
 }
 
-input CreateTestEndpointInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateTestEndpointInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
 input UpdateProductVariantWithProductInput {
   name: String
   description: String
@@ -266,3 +251,14 @@ input UpdateProductVariantWithProductInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input CreateProductCategoryInput {
+  name: String!
+  description: String
+}
+
+input UpdateProductCategoryInput {
+  name: String
+  description: String
+  id: Int!
+}

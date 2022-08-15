@@ -7,9 +7,9 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CheckoutModule } from './checkout/checkout.module';
-import { TestEndpointModule } from './test-endpoint/test-endpoint.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ProductCategoriesModule } from './product-categories/product-categories.module';
 
 @Module({
   imports: [
@@ -24,8 +24,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ProductsModule,
     PrismaModule,
     CheckoutModule,
-    TestEndpointModule,
     ProductVariantsModule,
+    ProductCategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ProductType } from '@prisma/client';
-import { ProductCategory } from './product-category.entity';
+import { ProductCategory } from '../../product-categories/entities/product-category.entity';
 import { ProductVariant } from '../../product-variants/entities/product-variant.entity';
 import { TaxRate } from './tax-rate.entity';
 
