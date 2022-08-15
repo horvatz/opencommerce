@@ -44,7 +44,20 @@ model ProductVariant {
   product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  media         ProductMedia[]
   checkoutItems CheckoutItem[]
+}
+
+// Product Media
+model ProductMedia {
+  id               String          @id @default(cuid())
+  filename         String
+  path             String
+  // Relationships
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
+  productVariantId String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 // Product categories

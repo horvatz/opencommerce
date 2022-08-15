@@ -8,6 +8,12 @@ type ProductCategory {
   description: String
 }
 
+type ProductMedia {
+  id: ID!
+  fileName: String!
+  path: String!
+}
+
 type ProductVariant {
   id: ID!
   name: String!
@@ -17,6 +23,7 @@ type ProductVariant {
   available: Boolean!
   price: Decimal!
   salePrice: Decimal
+  categories: [ProductMedia!]
 }
 
 """An arbitrary-precision Decimal type"""
@@ -164,6 +171,14 @@ type Mutation {
     """ID of the product variant"""
     id: String!
   ): ProductVariant!
+  productVariantMediaUpload(productVariantId: String!, file: Upload!): ProductVariant!
+  productVariantMediaRemove(
+    """ID of the product variant"""
+    productVariantId: String!
+
+    """ID of the product variant media"""
+    mediaId: String!
+  ): ProductVariant!
 }
 
 input CreateProductInput {
@@ -248,3 +263,6 @@ input UpdateProductVariantWithProductInput {
   price: Decimal
   salePrice: Decimal
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

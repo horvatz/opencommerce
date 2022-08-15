@@ -1245,6 +1245,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/serve-static@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@nestjs/serve-static@npm:3.0.0"
+  dependencies:
+    path-to-regexp: 0.2.5
+  peerDependencies:
+    "@nestjs/common": ^9.0.0
+    "@nestjs/core": ^9.0.0
+  checksum: fb5873506c13ca3625e462c722d57fa0f1f5299803ed9d8d3b3afdc0aa8f337cf4aee7528cbe38a65aa511f440ad6d37c45885d0dae1444887915fa292e4697c
+  languageName: node
+  linkType: hard
+
 "@nestjs/testing@npm:^9.0.0":
   version: 9.0.8
   resolution: "@nestjs/testing@npm:9.0.8"
@@ -2689,7 +2701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"busboy@npm:^1.0.0":
+"busboy@npm:^1.0.0, busboy@npm:^1.6.0":
   version: 1.6.0
   resolution: "busboy@npm:1.6.0"
   dependencies:
@@ -4169,6 +4181,24 @@ __metadata:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
+  languageName: node
+  linkType: hard
+
+"graphql-upload-minimal@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "graphql-upload-minimal@npm:1.5.3"
+  dependencies:
+    busboy: ^1.6.0
+  peerDependencies:
+    "@types/express": ^4.0.29
+    "@types/koa": ^2.11.4
+    graphql: 0.13.1 - 16
+  peerDependenciesMeta:
+    "@types/express":
+      optional: true
+    "@types/koa":
+      optional: true
+  checksum: 59d056eb16533e73ac94e9814c0a733e552dcd2ee5709e7df94f110b4a3c39ee4648db2a6277ba068b4753bdd914e9dcef23fa925016ed40cfb16eab6736fb5c
   languageName: node
   linkType: hard
 
@@ -5819,6 +5849,7 @@ __metadata:
     "@nestjs/graphql": ^10.0.21
     "@nestjs/platform-express": ^9.0.0
     "@nestjs/schematics": ^9.0.0
+    "@nestjs/serve-static": ^3.0.0
     "@nestjs/testing": ^9.0.0
     "@prisma/client": ^4.1.1
     "@types/express": ^4.17.13
@@ -5834,6 +5865,7 @@ __metadata:
     eslint-config-prettier: ^8.3.0
     eslint-plugin-prettier: ^4.0.0
     graphql: ^16.5.0
+    graphql-upload-minimal: ^1.5.3
     jest: 28.1.2
     prettier: ^2.3.2
     prisma: ^4.1.1
@@ -5848,6 +5880,7 @@ __metadata:
     ts-node: ^10.0.0
     tsconfig-paths: 4.0.0
     typescript: ^4.3.5
+    uuid: ^8.3.2
     webpack: ^5.74.0
   languageName: unknown
   linkType: soft
@@ -6012,6 +6045,13 @@ __metadata:
   version: 0.1.7
   resolution: "path-to-regexp@npm:0.1.7"
   checksum: 69a14ea24db543e8b0f4353305c5eac6907917031340e5a8b37df688e52accd09e3cebfe1660b70d76b6bd89152f52183f28c74813dbf454ba1a01c82a38abce
+  languageName: node
+  linkType: hard
+
+"path-to-regexp@npm:0.2.5":
+  version: 0.2.5
+  resolution: "path-to-regexp@npm:0.2.5"
+  checksum: 44adcbd847d170786490de80d2abc4762d5e65cd8857f230b87bdff6ab1bd17a91baa201fea549954b4cbfd208ae021a3a4ebac19a69ebdf3fdc628c8344ad39
   languageName: node
   linkType: hard
 
@@ -7349,7 +7389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:8.3.2, uuid@npm:^8.0.0":
+"uuid@npm:8.3.2, uuid@npm:^8.0.0, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:

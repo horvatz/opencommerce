@@ -9,12 +9,17 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { TestEndpointModule } from './test-endpoint/test-endpoint.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '../uploads'), // added ../ to get one folder back
+      serveRoot: '/uploads/', //last slash was important
     }),
     ProductsModule,
     PrismaModule,
