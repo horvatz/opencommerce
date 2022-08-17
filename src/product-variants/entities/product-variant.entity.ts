@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Decimal } from '@prisma/client/runtime';
 import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
-import { ProductMedia } from './product-media.entity';
 
 @ObjectType()
 export class ProductVariant {
@@ -28,7 +27,4 @@ export class ProductVariant {
 
   @Field(() => GraphQLDecimal, { nullable: true })
   salePrice!: Decimal | null;
-
-  @Field(() => [ProductMedia], { nullable: true })
-  categories?: Array<ProductMedia>;
 }

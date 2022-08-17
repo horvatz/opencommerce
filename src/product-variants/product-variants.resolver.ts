@@ -1,11 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserInputError } from 'apollo-server-express';
-import { createWriteStream } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-
-import { CreateProductVariantMediaArgs } from './dto/args/create-product-variant-media.args';
 import { CreateProductVariantArgs } from './dto/args/create-product-variant.args';
-import { FindProductVariantMediaArgs } from './dto/args/find-product-variant-media.args';
 import { FindProductVariantArgs } from './dto/args/find-product-variant.args';
 import { UpdateProductVariantArgs } from './dto/args/update-product-variant.args';
 import { ProductVariant } from './entities/product-variant.entity';
@@ -41,36 +35,5 @@ export class ProductVariantsResolver {
     @Args() removeProductVariantArgs: FindProductVariantArgs,
   ) {
     return this.productVariantsService.delete(removeProductVariantArgs);
-  }
-
-  @Mutation(() => ProductVariant)
-  async productVariantMediaUpload(
-    @Args() createProductVariantMediaArgs: CreateProductVariantMediaArgs,
-  ) {
-    try {
-      const { createReadStream, filename } =
-        await createProductVariantMediaArgs.file;
-
-      const generateFileName = `${uuidv4()}-${filename}`;
-
-      createReadStream().pipe(
-        createWriteStream(`./uploads/${generateFileName}`),
-      );
-
-      return this.productVariantsService.uploadMedia(
-        generateFileName,
-        `/uploads/${generateFileName}`,
-        createProductVariantMediaArgs.productVariantId,
-      );
-    } catch (error) {
-      throw new UserInputError('Invalid file');
-    }
-  }
-
-  @Mutation(() => ProductVariant)
-  productVariantMediaRemove(
-    @Args() removeProductVariantMediaArgs: FindProductVariantMediaArgs,
-  ) {
-    this.productVariantsService.deleteMedia(removeProductVariantMediaArgs);
   }
 }

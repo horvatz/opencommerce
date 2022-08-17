@@ -1,16 +1,16 @@
 import { ArgsType, Field } from '@nestjs/graphql';
 
 @ArgsType()
-export class FindProductVariantMediaArgs {
+export class FindProductMediaArgs {
   @Field(() => String, {
     nullable: false,
-    description: 'ID of the product variant',
+    description: 'ID of the product',
   })
-  productVariantId!: string;
+  productId!: string;
 
   @Field(() => String, {
     nullable: false,
-    description: 'ID of the product variant media',
+    description: 'ID of the product media',
   })
   mediaId!: string;
 }

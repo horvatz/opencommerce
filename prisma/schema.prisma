@@ -26,6 +26,7 @@ model Product {
   variants    ProductVariant[]
   taxRate     TaxRate?          @relation(fields: [taxRateId], references: [id])
   taxRateId   Int?
+  media       ProductMedia[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }
@@ -34,7 +35,7 @@ model ProductVariant {
   id            String         @id @default(cuid())
   name          String
   description   String?
-  sku           String?
+  sku           String?        @unique
   weight        Decimal?       @db.Decimal(10, 4)
   available     Boolean        @default(true)
   price         Decimal        @db.Decimal(12, 2)
@@ -44,20 +45,20 @@ model ProductVariant {
   product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  media         ProductMedia[]
   checkoutItems CheckoutItem[]
 }
 
 // Product Media
 model ProductMedia {
-  id               String          @id @default(cuid())
-  filename         String
-  path             String
+  id        String   @id @default(cuid())
+  filename  String
+  path      String
+  metadata  String?
   // Relationships
-  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
-  productVariantId String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
 }
 
 // Product categories

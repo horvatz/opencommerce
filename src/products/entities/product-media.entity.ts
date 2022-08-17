@@ -10,4 +10,7 @@ export class ProductMedia {
 
   @Field(() => String, { nullable: false })
   path!: string;
+
+  @Field(() => String, { nullable: true })
+  metadata?: string;
 }

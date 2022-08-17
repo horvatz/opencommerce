@@ -118,4 +118,59 @@ export class ProductsService {
       }
     }
   }
+
+  async uploadMedia(
+    filename: string,
+    path: string,
+    productId: string,
+    metadata?: string,
+  ): Promise<Product> {
+    try {
+      const product = await this.prisma.product.update({
+        where: { id: productId },
+        data: {
+          media: {
+            create: {
+              filename,
+              path,
+              metadata,
+            },
+          },
+        },
+        include: { media: true },
+      });
+      return product;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid product ID');
+        }
+        throw error;
+      }
+    }
+  }
+
+  async deleteMedia(productId: string, mediaId: string): Promise<Product> {
+    try {
+      const product = await this.prisma.product.update({
+        where: { id: productId },
+        data: {
+          media: {
+            delete: {
+              id: mediaId,
+            },
+          },
+        },
+      });
+
+      return product;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid product variant or media ID');
+        }
+        throw error;
+      }
+    }
+  }
 }
