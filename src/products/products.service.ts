@@ -13,7 +13,7 @@ export class ProductsService {
 
   async findAll(): Promise<Product[]> {
     const products = await this.prisma.product.findMany({
-      include: { categories: true, variants: true, taxRate: true },
+      include: { categories: true, variants: true, taxRate: true, media: true },
     });
 
     return products;
@@ -22,7 +22,7 @@ export class ProductsService {
   async findOne(findProductArgs: FindProductArgs): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id: findProductArgs.id },
-      include: { categories: true, variants: true, taxRate: true },
+      include: { categories: true, variants: true, taxRate: true, media: true },
     });
 
     if (!product) {
@@ -50,7 +50,12 @@ export class ProductsService {
           categories: { connect: categoriesIds },
           taxRate: { connect: taxRate ? { id: taxRate?.id } : undefined },
         },
-        include: { categories: true, variants: true, taxRate: true },
+        include: {
+          categories: true,
+          variants: true,
+          taxRate: true,
+          media: true,
+        },
       });
       return createProduct;
     } catch (error) {
@@ -85,7 +90,12 @@ export class ProductsService {
           categories: { connect: categoriesIds },
           taxRate: { connect: taxRate ? { id: taxRate?.id } : undefined },
         },
-        include: { categories: true, variants: true, taxRate: true },
+        include: {
+          categories: true,
+          variants: true,
+          taxRate: true,
+          media: true,
+        },
       });
       return createProduct;
     } catch (error) {
@@ -107,7 +117,14 @@ export class ProductsService {
     try {
       const product = await this.prisma.product.delete({
         where: { id },
+        include: {
+          categories: true,
+          variants: true,
+          taxRate: true,
+          media: true,
+        },
       });
+      console.log(product);
       return product;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -137,7 +154,12 @@ export class ProductsService {
             },
           },
         },
-        include: { media: true },
+        include: {
+          categories: true,
+          variants: true,
+          taxRate: true,
+          media: true,
+        },
       });
       return product;
     } catch (error) {
@@ -161,6 +183,7 @@ export class ProductsService {
             },
           },
         },
+        include: { media: true },
       });
 
       return product;

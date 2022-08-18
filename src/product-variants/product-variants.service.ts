@@ -38,11 +38,18 @@ export class ProductVariantsService {
       throw new UserInputError('Invalid product ID');
     }
 
-    const productVariant = await this.prisma.productVariant.create({
-      data: { ...variant, product: { connect: { id: productId } } },
-    });
+    try {
+      const productVariant = await this.prisma.productVariant.create({
+        data: { ...variant, product: { connect: { id: productId } } },
+      });
 
-    return productVariant;
+      return productVariant;
+    } catch (error) {
+      if ((error.code = 'P2002')) {
+        throw new UserInputError('SKU already exists');
+      }
+      throw error;
+    }
   }
 
   async update(
@@ -61,6 +68,8 @@ export class ProductVariantsService {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new UserInputError('Invalid product variant ID');
+        } else if ((error.code = 'P2002')) {
+          throw new UserInputError('SKU already exists');
         }
       }
       throw error;

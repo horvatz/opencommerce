@@ -22,9 +22,9 @@ export class CreateProductInput {
   @IsEnum(ProductType)
   type?: ProductType;
 
-  @Field(() => [FindProductCategoryInput], { nullable: true })
+  @Field(() => [FindProductCategoryInput], { nullable: false })
   @Type(() => FindProductCategoryInput)
-  categories?: Array<FindProductCategoryInput>;
+  categories!: Array<FindProductCategoryInput>;
 
   @Field(() => [CreateProductVariantWithProductInput], { nullable: true })
   @Type(() => CreateProductVariantWithProductInput)

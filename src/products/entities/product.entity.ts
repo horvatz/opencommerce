@@ -22,8 +22,8 @@ export class Product {
   })
   type!: ProductType;
 
-  @Field(() => [ProductCategory], { nullable: true })
-  categories?: Array<ProductCategory>;
+  @Field(() => [ProductCategory], { nullable: false })
+  categories!: Array<ProductCategory>;
 
   @Field(() => [ProductVariant], { nullable: true })
   variants?: Array<ProductVariant>;

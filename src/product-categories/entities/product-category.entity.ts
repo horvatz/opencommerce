@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Product } from 'src/products/entities/product.entity';
 
 @ObjectType()
 export class ProductCategory {
@@ -10,4 +11,7 @@ export class ProductCategory {
 
   @Field(() => String, { nullable: true })
   description!: string | null;
+
+  @Field(() => [Product], { nullable: true })
+  products?: Array<Product>;
 }

@@ -6,6 +6,7 @@ type ProductCategory {
   id: ID!
   name: String!
   description: String
+  products: [Product!]
 }
 
 type ProductVariant {
@@ -24,7 +25,7 @@ scalar Decimal
 
 type ProductMedia {
   id: ID!
-  fileName: String!
+  filename: String!
   path: String!
   metadata: String
 }
@@ -41,7 +42,7 @@ type Product {
   name: String!
   description: String
   type: ProductType!
-  categories: [ProductCategory!]
+  categories: [ProductCategory!]!
   variants: [ProductVariant!]
   media: [ProductMedia!]!
   taxRate: TaxRate
@@ -182,8 +183,8 @@ type Mutation {
     """ID of the product variant"""
     id: String!
   ): ProductVariant!
-  createProductCategory(createProductCategoryInput: CreateProductCategoryInput!): ProductCategory!
-  updateProductCategory(updateProductCategoryInput: UpdateProductCategoryInput!): ProductCategory!
+  createProductCategory(category: CreateProductCategoryInput!): ProductCategory!
+  updateProductCategory(category: UpdateProductCategoryInput!, id: Int!): ProductCategory!
   removeProductCategory(id: Int!): ProductCategory!
 }
 
@@ -193,7 +194,7 @@ input CreateProductInput {
 
   """Type of the product (default is REGULAR), can also be DIGITAL"""
   type: ProductType
-  categories: [FindProductCategoryInput!]
+  categories: [FindProductCategoryInput!]!
   variants: [CreateProductVariantWithProductInput!]
   taxRate: FindTaxRateInput
 }

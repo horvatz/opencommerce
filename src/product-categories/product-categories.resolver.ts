@@ -12,10 +12,10 @@ export class ProductCategoriesResolver {
 
   @Mutation(() => ProductCategory)
   createProductCategory(
-    @Args('createProductCategoryInput')
-    createProductCategoryInput: CreateProductCategoryInput,
+    @Args('category')
+    category: CreateProductCategoryInput,
   ) {
-    return this.productCategoriesService.create(createProductCategoryInput);
+    return this.productCategoriesService.create(category);
   }
 
   @Query(() => [ProductCategory], { name: 'productCategories' })
@@ -30,13 +30,11 @@ export class ProductCategoriesResolver {
 
   @Mutation(() => ProductCategory)
   updateProductCategory(
-    @Args('updateProductCategoryInput')
-    updateProductCategoryInput: UpdateProductCategoryInput,
+    @Args('category')
+    category: UpdateProductCategoryInput,
+    @Args('id', { type: () => Int }) id: number,
   ) {
-    return this.productCategoriesService.update(
-      updateProductCategoryInput.id,
-      updateProductCategoryInput,
-    );
+    return this.productCategoriesService.update(id, category);
   }
 
   @Mutation(() => ProductCategory)

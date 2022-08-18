@@ -6,7 +6,7 @@ export class ProductMedia {
   id!: string;
 
   @Field(() => String, { nullable: false })
-  fileName!: string;
+  filename!: string;
 
   @Field(() => String, { nullable: false })
   path!: string;

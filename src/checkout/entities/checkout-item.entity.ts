@@ -10,5 +10,5 @@ export class CheckoutItem {
   quantity!: number;
 
   @Field(() => ProductVariant, { nullable: false })
-  variant?: ProductVariant;
+  variant: ProductVariant;
 }

@@ -11,7 +11,15 @@ export class ProductCategoriesService {
 
   async findAll(): Promise<ProductCategory[]> {
     const productCategories = await this.prisma.productCategory.findMany({
-      include: { products: true },
+      include: {
+        products: {
+          include: {
+            variants: true,
+            taxRate: true,
+            media: true,
+          },
+        },
+      },
     });
 
     return productCategories;
@@ -20,7 +28,15 @@ export class ProductCategoriesService {
   async findOne(id: number): Promise<ProductCategory> {
     const productCategory = await this.prisma.productCategory.findUnique({
       where: { id },
-      include: { products: true },
+      include: {
+        products: {
+          include: {
+            variants: true,
+            taxRate: true,
+            media: true,
+          },
+        },
+      },
     });
 
     if (!productCategory) {
