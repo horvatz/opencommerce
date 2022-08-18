@@ -95,11 +95,12 @@ model Checkout {
   note             String?
   completed        Boolean         @default(false)
   status           CheckoutStatus  @default(OPEN)
+  paymentMethod    PaymentMethod?
   shippingAddress  Json?
   billingAddress   Json?
   // Relationships
   items            CheckoutItem[]
-  shippingMethodId Int?
+  shippingMethodId String?
   shippingMethod   ShippingMethod? @relation(fields: [shippingMethodId], references: [id])
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
@@ -109,6 +110,11 @@ enum CheckoutStatus {
   OPEN
   CLOSED
   CANCELED
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
 }
 
 model CheckoutItem {
@@ -125,7 +131,7 @@ model CheckoutItem {
 
 // Shipping methods
 model ShippingMethod {
-  id              Int        @id @default(autoincrement())
+  id              String     @id @default(cuid())
   name            String
   description     String?
   minDeliveryDays Int?

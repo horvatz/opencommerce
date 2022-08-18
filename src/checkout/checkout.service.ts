@@ -7,6 +7,8 @@ import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
 import { FindCheckoutArgs } from './dto/args/find-checkout.args';
 import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
 import { UpdateCheckoutStatusArgs } from './dto/args/update-checkout-status.args';
+import { UpdatePaymentMethodArgs } from './dto/args/update-payment-method.args';
+import { UpdateShippingMethodArgs } from './dto/args/update-shipping-method.args';
 
 @Injectable()
 export class CheckoutService {
@@ -104,6 +106,50 @@ export class CheckoutService {
         },
       },
     });
+  }
+
+  async shippingMethodUpdate(
+    updateShippingMethodArgs: UpdateShippingMethodArgs,
+  ): Promise<Checkout> {
+    const { id, shippingMethodId } = updateShippingMethodArgs;
+
+    try {
+      const checkout = this.prisma.checkout.update({
+        where: { id },
+        data: { shippingMethod: { connect: { id: shippingMethodId } } },
+      });
+
+      return checkout;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid checkout or shipping method id');
+        }
+        throw error;
+      }
+    }
+  }
+
+  async paymentMethodUpdate(
+    updatePaymentMethodArgs: UpdatePaymentMethodArgs,
+  ): Promise<Checkout> {
+    const { id, paymentMethod } = updatePaymentMethodArgs;
+
+    try {
+      const checkout = this.prisma.checkout.update({
+        where: { id },
+        data: { paymentMethod },
+      });
+
+      return checkout;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid checkout or shipping method id');
+        }
+        throw error;
+      }
+    }
   }
 
   async statusUpdate(updateCheckoutStatusArgs: UpdateCheckoutStatusArgs) {

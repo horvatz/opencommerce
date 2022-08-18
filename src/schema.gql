@@ -96,9 +96,15 @@ type Checkout {
   shippingAddress: Address
   billingAddress: Address
   shippingMethod: ShippingMethod
+  paymentMethod: PaymentMethod
   status: CheckoutStatus!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
 }
 
 enum CheckoutStatus {
@@ -182,6 +188,14 @@ type Mutation {
     """Address with pre-defined country"""
     address: CreateAddressInput!
   ): Checkout!
+  checkoutShippingMethodUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """ID of the shipping method"""
+    shippingMethodId: String!
+  ): Checkout!
+  checkoutPaymentMethodUpdate: Checkout!
   checkoutStatusUpdate(
     """ID of the checkout"""
     id: String!
