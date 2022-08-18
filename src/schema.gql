@@ -96,8 +96,15 @@ type Checkout {
   shippingAddress: Address
   billingAddress: Address
   shippingMethod: ShippingMethod
+  status: CheckoutStatus!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+enum CheckoutStatus {
+  OPEN
+  CLOSED
+  CANCELED
 }
 
 """
@@ -153,6 +160,14 @@ type Mutation {
     """ID of the product media"""
     mediaId: String!
   ): Product!
+  checkoutCreate: Checkout!
+  checkoutItemAdd(
+    """ID of the checkout"""
+    id: String!
+
+    """Checkout items"""
+    item: CheckoutItemInput!
+  ): Checkout!
   checkoutShippingAddressUpdate(
     """ID of the checkout"""
     id: String!
@@ -166,6 +181,11 @@ type Mutation {
 
     """Address with pre-defined country"""
     address: CreateAddressInput!
+  ): Checkout!
+  checkoutStatusUpdate(
+    """ID of the checkout"""
+    id: String!
+    status: CheckoutStatus!
   ): Checkout!
   checkoutComplete(
     """ID of the checkout"""
@@ -234,6 +254,11 @@ input UpdateProductInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input CheckoutItemInput {
+  quantity: Int!
+  variantId: String!
+}
 
 input CreateAddressInput {
   firstName: String!

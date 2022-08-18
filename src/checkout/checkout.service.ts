@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Checkout } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { UserInputError } from 'apollo-server-express';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
 import { FindCheckoutArgs } from './dto/args/find-checkout.args';
 import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
+import { UpdateCheckoutStatusArgs } from './dto/args/update-checkout-status.args';
 
 @Injectable()
 export class CheckoutService {
   constructor(private prisma: PrismaService) {}
 
-  // TODO implement create
-  /*create(createCheckoutInput: CreateOneCheckoutArgs) {
-    return this.prisma.checkout.create(createCheckoutInput);
+  create() {
+    return this.prisma.checkout.create({ data: {} });
   }
-  */
 
   async findOne(findCheckoutArgs: FindCheckoutArgs): Promise<Checkout> {
     const checkout = await this.prisma.checkout.findUnique({
@@ -28,6 +29,33 @@ export class CheckoutService {
     }
 
     return checkout;
+  }
+
+  async addCheckoutItem(
+    createCheckoutItemArgs: CreateCheckoutItemArgs,
+  ): Promise<Checkout> {
+    const { id, item } = createCheckoutItemArgs;
+
+    try {
+      await this.prisma.checkoutItem.create({
+        data: {
+          quantity: item.quantity,
+          checkout: { connect: { id } },
+          variant: { connect: { id: item.variantId } },
+        },
+      });
+
+      const checkout = await this.prisma.checkout.findUnique({ where: { id } });
+
+      return checkout;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid checkout or product variant ID');
+        }
+        throw error;
+      }
+    }
   }
 
   async shippingAddressUpdate(
@@ -76,6 +104,29 @@ export class CheckoutService {
         },
       },
     });
+  }
+
+  async statusUpdate(updateCheckoutStatusArgs: UpdateCheckoutStatusArgs) {
+    const { id, status } = updateCheckoutStatusArgs;
+
+    try {
+      const checkout = this.prisma.checkout.update({
+        where: { id },
+        data: {
+          status,
+        },
+      });
+
+      return checkout;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        // If variant or tax rate (i.e. does not exist in db) can't be connected throw error
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid checkout id');
+        }
+        throw error;
+      }
+    }
   }
 
   async complete(completeCheckoutArgs: FindCheckoutArgs): Promise<Checkout> {

@@ -94,6 +94,7 @@ model Checkout {
   id               String          @id @default(cuid())
   note             String?
   completed        Boolean         @default(false)
+  status           CheckoutStatus  @default(OPEN)
   shippingAddress  Json?
   billingAddress   Json?
   // Relationships
@@ -102,6 +103,12 @@ model Checkout {
   shippingMethod   ShippingMethod? @relation(fields: [shippingMethodId], references: [id])
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
+}
+
+enum CheckoutStatus {
+  OPEN
+  CLOSED
+  CANCELED
 }
 
 model CheckoutItem {

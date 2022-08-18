@@ -103,7 +103,7 @@ export class ProductsService {
         // If variant or tax rate (i.e. does not exist in db) can't be connected throw error
         if (error.code === 'P2025') {
           throw new UserInputError(
-            'Provided product, category or tax rate does not exit',
+            'Provided product, category or tax rate does not exist',
           );
         }
         throw error;

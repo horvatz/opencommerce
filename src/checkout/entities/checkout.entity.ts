@@ -1,4 +1,5 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { CheckoutStatus } from '@prisma/client';
 import { Address } from './address.entity';
 import { CheckoutItem } from './checkout-item.entity';
 import { ShippingMethod } from './shipping-method.entity';
@@ -26,9 +27,17 @@ export class Checkout {
   @Field(() => ShippingMethod, { nullable: true })
   shippingMethod?: ShippingMethod | null;
 
+  @Field(() => CheckoutStatus, {
+    nullable: false,
+    defaultValue: CheckoutStatus.OPEN,
+  })
+  status!: CheckoutStatus;
+
   @Field(() => Date, { nullable: false })
   createdAt!: Date;
 
   @Field(() => Date, { nullable: false })
   updatedAt!: Date;
 }
+
+registerEnumType(CheckoutStatus, { name: 'CheckoutStatus' });
