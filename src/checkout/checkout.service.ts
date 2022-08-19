@@ -4,9 +4,11 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { UserInputError } from 'apollo-server-express';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
+import { FindAllCheckoutsArgs } from './dto/args/find-all-checkouts.args';
 import { FindCheckoutItemArgs } from './dto/args/find-checkout-item.args';
 import { FindCheckoutArgs } from './dto/args/find-checkout.args';
 import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
+import { UpdateCheckoutEmailPhoneArgs } from './dto/args/update-checkout-email-phone.args';
 import { UpdateCheckoutStatusArgs } from './dto/args/update-checkout-status.args';
 import { UpdatePaymentMethodArgs } from './dto/args/update-payment-method.args';
 import { UpdateShippingMethodArgs } from './dto/args/update-shipping-method.args';
@@ -19,11 +21,55 @@ export class CheckoutService {
     return this.prisma.checkout.create({ data: {}, include: { items: true } });
   }
 
+  async findAll(args: FindAllCheckoutsArgs) {
+    const { filter } = args;
+    const checkouts = await this.prisma.checkout.findMany({
+      where: filter.status
+        ? { status: filter.status, completed: true }
+        : { completed: true },
+      include: {
+        items: {
+          include: {
+            variant: { include: { product: { include: { media: true } } } },
+          },
+        },
+        shippingMethod: true,
+      },
+    });
+    return checkouts;
+  }
+
   async findOne(findCheckoutArgs: FindCheckoutArgs): Promise<Checkout> {
     const checkout = await this.prisma.checkout.findUnique({
       where: { id: findCheckoutArgs.id },
       include: {
-        items: { include: { variant: true } },
+        items: {
+          include: {
+            variant: { include: { product: { include: { media: true } } } },
+          },
+        },
+        shippingMethod: true,
+      },
+    });
+
+    if (!checkout || checkout?.completed === true) {
+      throw new UserInputError('Invalid checkout ID');
+    }
+
+    return checkout;
+  }
+
+  async findCompletedCheckout(
+    findCheckoutArgs: FindCheckoutArgs,
+  ): Promise<Checkout> {
+    const checkout = await this.prisma.checkout.findFirst({
+      where: { id: findCheckoutArgs.id, completed: true },
+      include: {
+        items: {
+          include: {
+            variant: { include: { product: { include: { media: true } } } },
+          },
+        },
         shippingMethod: true,
       },
     });
@@ -172,6 +218,29 @@ export class CheckoutService {
     });
 
     return checkout;
+  }
+
+  async emailAndPhoneUpdate(
+    updateCheckoutEmailPhoneArgs: UpdateCheckoutEmailPhoneArgs,
+  ): Promise<Checkout> {
+    const { id, email, phone } = updateCheckoutEmailPhoneArgs;
+    try {
+      const checkout = await this.prisma.checkout.update({
+        where: { id },
+        data: {
+          email,
+          phone,
+        },
+      });
+      return checkout;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid checkout ID');
+        }
+        throw error;
+      }
+    }
   }
 
   async shippingAddressUpdate(

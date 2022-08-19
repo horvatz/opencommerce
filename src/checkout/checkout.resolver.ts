@@ -1,9 +1,11 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { CheckoutService } from './checkout.service';
 import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
+import { FindAllCheckoutsArgs } from './dto/args/find-all-checkouts.args';
 import { FindCheckoutItemArgs } from './dto/args/find-checkout-item.args';
 import { FindCheckoutArgs } from './dto/args/find-checkout.args';
 import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
+import { UpdateCheckoutEmailPhoneArgs } from './dto/args/update-checkout-email-phone.args';
 import { UpdateCheckoutStatusArgs } from './dto/args/update-checkout-status.args';
 import { UpdatePaymentMethodArgs } from './dto/args/update-payment-method.args';
 import { UpdateShippingMethodArgs } from './dto/args/update-shipping-method.args';
@@ -18,6 +20,19 @@ export class CheckoutResolver {
     return this.checkoutService.create();
   }
 
+  // Returns only completed checkouts
+  @Query(() => [Checkout], { name: 'checkouts' })
+  findAll(@Args() findAllCheckoutsArgs: FindAllCheckoutsArgs) {
+    return this.checkoutService.findAll(findAllCheckoutsArgs);
+  }
+
+  // Returns only completed checkouts
+  @Query(() => Checkout, { name: 'completedCheckout' })
+  findCompletedCheckout(@Args() findCheckoutArgs: FindCheckoutArgs) {
+    return this.checkoutService.findCompletedCheckout(findCheckoutArgs);
+  }
+
+  // Returns not completed checkouts
   @Query(() => Checkout, { name: 'checkout' })
   findCheckout(@Args() findCheckoutArgs: FindCheckoutArgs) {
     return this.checkoutService.findOne(findCheckoutArgs);
@@ -36,6 +51,15 @@ export class CheckoutResolver {
   @Mutation(() => Checkout)
   checkoutItemRemove(@Args() removeCheckoutItemArgs: FindCheckoutItemArgs) {
     return this.checkoutService.removeCheckoutItem(removeCheckoutItemArgs);
+  }
+
+  @Mutation(() => Checkout)
+  checkoutEmailAndPhoneUpdate(
+    @Args() updateCheckoutEmailPhoneArgs: UpdateCheckoutEmailPhoneArgs,
+  ) {
+    return this.checkoutService.emailAndPhoneUpdate(
+      updateCheckoutEmailPhoneArgs,
+    );
   }
 
   @Mutation(() => Checkout)

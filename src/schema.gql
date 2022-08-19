@@ -60,7 +60,6 @@ type Country {
 }
 
 type Address {
-  id: ID!
   firstName: String!
   lastName: String!
   streetAddress: String!
@@ -93,6 +92,8 @@ type Checkout {
   note: String
   completed: Boolean!
   items: [CheckoutItem!]
+  email: String!
+  phone: String
   shippingAddress: Address
   billingAddress: Address
   shippingMethod: ShippingMethod
@@ -124,6 +125,11 @@ type Query {
     """ID of the product"""
     id: String!
   ): Product!
+  checkouts(filter: CheckoutFilterInput!): [Checkout!]!
+  completedCheckout(
+    """ID of the checkout"""
+    id: String!
+  ): Checkout!
   checkout(
     """ID of the checkout"""
     id: String!
@@ -134,6 +140,12 @@ type Query {
   ): ProductVariant!
   productCategories: [ProductCategory!]!
   productCategory(id: Int!): ProductCategory!
+  taxRates: [TaxRate!]!
+  taxRate(id: Int!): TaxRate!
+}
+
+input CheckoutFilterInput {
+  status: CheckoutStatus
 }
 
 type Mutation {
@@ -188,6 +200,16 @@ type Mutation {
     """ID of the checkout item"""
     variantId: String!
   ): Checkout!
+  checkoutEmailAndPhoneUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """Email of customer"""
+    email: String!
+
+    """Phone of customer"""
+    phone: String
+  ): Checkout!
   checkoutShippingAddressUpdate(
     """ID of the checkout"""
     id: String!
@@ -240,6 +262,9 @@ type Mutation {
   createProductCategory(category: CreateProductCategoryInput!): ProductCategory!
   updateProductCategory(category: UpdateProductCategoryInput!, id: Int!): ProductCategory!
   removeProductCategory(id: Int!): ProductCategory!
+  createTaxRate(createTaxRateInput: CreateTaxRateInput!): TaxRate!
+  updateTaxRate(id: Int!, taxRate: UpdateTaxRateInput!): TaxRate!
+  removeTaxRate(id: Int!): TaxRate!
 }
 
 input CreateProductInput {
@@ -331,4 +356,26 @@ input UpdateProductCategoryInput {
   name: String
   description: String
   id: Int!
+}
+
+input CreateTaxRateInput {
+  """Name of tax rate"""
+  name: String!
+
+  """Tax rate description"""
+  description: String
+
+  """Actual tax rate in deciamsl"""
+  rate: Decimal!
+}
+
+input UpdateTaxRateInput {
+  """Name of tax rate"""
+  name: String
+
+  """Tax rate description"""
+  description: String
+
+  """Actual tax rate in deciamsl"""
+  rate: Decimal
 }

@@ -3,7 +3,7 @@ import { ProductType } from '@prisma/client';
 import { ProductCategory } from '../../product-categories/entities/product-category.entity';
 import { ProductVariant } from '../../product-variants/entities/product-variant.entity';
 import { ProductMedia } from './product-media.entity';
-import { TaxRate } from './tax-rate.entity';
+import { TaxRate } from '../../tax-rates/entities/tax-rate.entity';
 
 @ObjectType()
 export class Product {

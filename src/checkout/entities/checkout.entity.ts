@@ -18,6 +18,12 @@ export class Checkout {
   @Field(() => [CheckoutItem], { nullable: true })
   items?: Array<CheckoutItem>;
 
+  @Field(() => String, { nullable: false })
+  email!: string;
+
+  @Field(() => String, { nullable: true })
+  phone?: string;
+
   @Field(() => Address, { nullable: true })
   shippingAddress?: Address | null;
 

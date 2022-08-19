@@ -96,6 +96,8 @@ model Checkout {
   completed        Boolean         @default(false)
   status           CheckoutStatus  @default(OPEN)
   paymentMethod    PaymentMethod?
+  email            String          @default("user@example.com")
+  phone            String?
   shippingAddress  Json?
   billingAddress   Json?
   // Relationships

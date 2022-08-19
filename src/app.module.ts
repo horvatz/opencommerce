@@ -10,6 +10,7 @@ import { CheckoutModule } from './checkout/checkout.module';
 import { ProductVariantsModule } from './product-variants/product-variants.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ProductCategoriesModule } from './product-categories/product-categories.module';
+import { TaxRatesModule } from './tax-rates/tax-rates.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ProductCategoriesModule } from './product-categories/product-categories
     CheckoutModule,
     ProductVariantsModule,
     ProductCategoriesModule,
+    TaxRatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,11 +1,8 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Country } from './country.entity';
 
 @ObjectType()
 export class Address {
-  @Field(() => ID, { nullable: false })
-  id!: string;
-
   @Field(() => String, { nullable: false })
   firstName!: string;
 
