@@ -19,6 +19,9 @@ export class ProductVariant {
   @Field(() => GraphQLDecimal, { nullable: true })
   weight!: Decimal | null;
 
+  @Field(() => Boolean, { nullable: false })
+  active!: boolean;
+
   @Field(() => Boolean, { nullable: false, defaultValue: true })
   available!: boolean;
 

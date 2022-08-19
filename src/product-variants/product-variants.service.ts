@@ -82,8 +82,9 @@ export class ProductVariantsService {
     const { id } = removeProductVariantArgs;
 
     try {
-      const productVariant = await this.prisma.productVariant.delete({
+      const productVariant = await this.prisma.productVariant.update({
         where: { id },
+        data: { active: false },
       });
       return productVariant;
     } catch (error) {

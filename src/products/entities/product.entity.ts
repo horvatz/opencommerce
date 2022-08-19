@@ -16,6 +16,9 @@ export class Product {
   @Field(() => String, { nullable: true })
   description?: string;
 
+  @Field(() => Boolean, { nullable: false })
+  active!: boolean;
+
   @Field(() => ProductType, {
     nullable: false,
     defaultValue: ProductType.REGULAR,

@@ -15,12 +15,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Product models
 model Product {
   id          String            @id @default(cuid())
   name        String
   description String?
   type        ProductType       @default(REGULAR)
+  active      Boolean           @default(true)
   // Relationships
   categories  ProductCategory[]
   variants    ProductVariant[]
@@ -40,6 +51,7 @@ model ProductVariant {
   available     Boolean        @default(true)
   price         Decimal        @db.Decimal(12, 2)
   salePrice     Decimal?       @db.Decimal(12, 2)
+  active        Boolean        @default(true)
   // Relationships
   productId     String
   product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)

@@ -5,7 +5,7 @@ import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 @ObjectType()
 export class TaxRate {
   @Field(() => ID, { nullable: false })
-  id!: string;
+  id!: number;
 
   @Field(() => String, { nullable: false })
   name!: string;

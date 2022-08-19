@@ -13,7 +13,12 @@ export class ProductsService {
 
   async findAll(): Promise<Product[]> {
     const products = await this.prisma.product.findMany({
-      include: { categories: true, variants: true, taxRate: true, media: true },
+      include: {
+        categories: true,
+        variants: { where: { active: true } },
+        taxRate: true,
+        media: true,
+      },
     });
 
     return products;
@@ -22,7 +27,12 @@ export class ProductsService {
   async findOne(findProductArgs: FindProductArgs): Promise<Product> {
     const product = await this.prisma.product.findUnique({
       where: { id: findProductArgs.id },
-      include: { categories: true, variants: true, taxRate: true, media: true },
+      include: {
+        categories: true,
+        variants: { where: { active: true } },
+        taxRate: true,
+        media: true,
+      },
     });
 
     if (!product) {
@@ -52,7 +62,7 @@ export class ProductsService {
         },
         include: {
           categories: true,
-          variants: true,
+          variants: { where: { active: true } },
           taxRate: true,
           media: true,
         },
@@ -102,7 +112,7 @@ export class ProductsService {
         },
         include: {
           categories: true,
-          variants: true,
+          variants: { where: { active: true } },
           taxRate: true,
           media: true,
         },
@@ -125,16 +135,16 @@ export class ProductsService {
     const { id } = deleteProductArgs;
 
     try {
-      const product = await this.prisma.product.delete({
+      const product = await this.prisma.product.update({
         where: { id },
+        data: { active: false },
         include: {
           categories: true,
-          variants: true,
+          variants: { where: { active: true } },
           taxRate: true,
           media: true,
         },
       });
-      console.log(product);
       return product;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -166,7 +176,7 @@ export class ProductsService {
         },
         include: {
           categories: true,
-          variants: true,
+          variants: { where: { active: true } },
           taxRate: true,
           media: true,
         },
@@ -193,7 +203,12 @@ export class ProductsService {
             },
           },
         },
-        include: { media: true },
+        include: {
+          categories: true,
+          variants: { where: { active: true } },
+          taxRate: true,
+          media: true,
+        },
       });
 
       return product;
