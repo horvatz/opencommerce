@@ -95,6 +95,7 @@ model TaxRate {
   name        String
   description String?
   rate        Decimal   @db.Decimal(12, 1)
+  active      Boolean   @default(true)
   // Relationships
   products    Product[]
   createdAt   DateTime  @default(now())

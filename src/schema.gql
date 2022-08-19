@@ -100,6 +100,7 @@ type Checkout {
   billingAddress: Address
   shippingMethod: ShippingMethod
   paymentMethod: PaymentMethod
+  totalPrice: Decimal
   status: CheckoutStatus!
   createdAt: DateTime!
   updatedAt: DateTime!

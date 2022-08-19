@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { CheckoutStatus, PaymentMethod } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime';
+import { GraphQLDecimal } from 'prisma-graphql-type-decimal';
 import { Address } from './address.entity';
 import { CheckoutItem } from './checkout-item.entity';
 import { ShippingMethod } from './shipping-method.entity';
@@ -35,6 +37,9 @@ export class Checkout {
 
   @Field(() => PaymentMethod, { nullable: true })
   paymentMethod?: PaymentMethod | null;
+
+  @Field(() => GraphQLDecimal, { nullable: true })
+  totalPrice!: Decimal | null;
 
   @Field(() => CheckoutStatus, {
     nullable: false,

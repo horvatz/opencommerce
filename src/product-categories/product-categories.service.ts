@@ -13,8 +13,9 @@ export class ProductCategoriesService {
     const productCategories = await this.prisma.productCategory.findMany({
       include: {
         products: {
+          where: { active: true },
           include: {
-            variants: true,
+            variants: { where: { active: true } },
             taxRate: true,
             media: true,
           },
@@ -30,8 +31,9 @@ export class ProductCategoriesService {
       where: { id },
       include: {
         products: {
+          where: { active: true },
           include: {
-            variants: true,
+            variants: { where: { active: true } },
             taxRate: true,
             media: true,
           },

@@ -18,11 +18,16 @@ export class TaxRatesService {
   }
 
   findAll() {
-    return this.prisma.taxRate.findMany({ include: { products: true } });
+    return this.prisma.taxRate.findMany({
+      where: { active: true },
+      include: { products: true },
+    });
   }
 
   async findOne(id: number): Promise<TaxRate> {
-    const taxRate = await this.prisma.taxRate.findUnique({ where: { id } });
+    const taxRate = await this.prisma.taxRate.findUnique({
+      where: { id },
+    });
 
     if (!taxRate) {
       throw new UserInputError('Invalid tax rate ID');
@@ -50,8 +55,11 @@ export class TaxRatesService {
 
   remove(id: number) {
     try {
-      const taxRate = this.prisma.taxRate.delete({
+      const taxRate = this.prisma.taxRate.update({
         where: { id },
+        data: {
+          active: false,
+        },
       });
 
       return taxRate;
