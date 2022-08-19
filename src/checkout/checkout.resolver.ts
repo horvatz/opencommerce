@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { CheckoutService } from './checkout.service';
 import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
+import { FindCheckoutItemArgs } from './dto/args/find-checkout-item.args';
 import { FindCheckoutArgs } from './dto/args/find-checkout.args';
 import { UpdateCheckoutAddressArgs } from './dto/args/update-checkout-address.args';
 import { UpdateCheckoutStatusArgs } from './dto/args/update-checkout-status.args';
@@ -28,6 +29,16 @@ export class CheckoutResolver {
   }
 
   @Mutation(() => Checkout)
+  checkoutItemUpdate(@Args() updateCheckoutItemArgs: CreateCheckoutItemArgs) {
+    return this.checkoutService.updateCheckoutItem(updateCheckoutItemArgs);
+  }
+
+  @Mutation(() => Checkout)
+  checkoutItemRemove(@Args() removeCheckoutItemArgs: FindCheckoutItemArgs) {
+    return this.checkoutService.removeCheckoutItem(removeCheckoutItemArgs);
+  }
+
+  @Mutation(() => Checkout)
   checkoutShippingAddressUpdate(
     @Args() updateCheckoutAddressArgs: UpdateCheckoutAddressArgs,
   ) {
@@ -47,14 +58,14 @@ export class CheckoutResolver {
   checkoutShippingMethodUpdate(
     @Args() updateShippingMethodArgs: UpdateShippingMethodArgs,
   ) {
-    return this.checkoutShippingMethodUpdate(updateShippingMethodArgs);
+    return this.checkoutService.shippingMethodUpdate(updateShippingMethodArgs);
   }
 
   @Mutation(() => Checkout)
   checkoutPaymentMethodUpdate(
-    updatePaymentMethodArgs: UpdatePaymentMethodArgs,
+    @Args() updatePaymentMethodArgs: UpdatePaymentMethodArgs,
   ) {
-    return this.checkoutPaymentMethodUpdate(updatePaymentMethodArgs);
+    return this.checkoutService.paymentMethodUpdate(updatePaymentMethodArgs);
   }
 
   @Mutation(() => Checkout)

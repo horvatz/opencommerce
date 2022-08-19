@@ -171,8 +171,22 @@ type Mutation {
     """ID of the checkout"""
     id: String!
 
-    """Checkout items"""
+    """Checkout item"""
     item: CheckoutItemInput!
+  ): Checkout!
+  checkoutItemUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """Checkout item"""
+    item: CheckoutItemInput!
+  ): Checkout!
+  checkoutItemRemove(
+    """ID of the checkout"""
+    id: String!
+
+    """ID of the checkout item"""
+    variantId: String!
   ): Checkout!
   checkoutShippingAddressUpdate(
     """ID of the checkout"""
@@ -195,7 +209,13 @@ type Mutation {
     """ID of the shipping method"""
     shippingMethodId: String!
   ): Checkout!
-  checkoutPaymentMethodUpdate: Checkout!
+  checkoutPaymentMethodUpdate(
+    """ID of the checkout"""
+    id: String!
+
+    """Payment method enum"""
+    paymentMethod: PaymentMethod!
+  ): Checkout!
   checkoutStatusUpdate(
     """ID of the checkout"""
     id: String!

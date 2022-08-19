@@ -82,12 +82,22 @@ export class ProductsService {
       })) ?? [];
 
     try {
+      const product = await this.prisma.product.findUnique({
+        where: { id },
+        include: { categories: true },
+      });
+
+      const oldCategoriesIds =
+        product.categories?.map((category) => ({
+          id: category.id,
+        })) ?? [];
+
       const createProduct = await this.prisma.product.update({
         where: { id },
         data: {
           ...productData,
           variants: { createMany: { data: variants ?? [] } },
-          categories: { connect: categoriesIds },
+          categories: { disconnect: oldCategoriesIds, connect: categoriesIds },
           taxRate: { connect: taxRate ? { id: taxRate?.id } : undefined },
         },
         include: {

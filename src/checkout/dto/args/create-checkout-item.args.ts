@@ -9,7 +9,7 @@ export class CreateCheckoutItemArgs {
 
   @Field(() => CheckoutItemInput, {
     nullable: false,
-    description: 'Checkout items',
+    description: 'Checkout item',
   })
   @Type(() => CheckoutItemInput)
   item!: CheckoutItemInput;
