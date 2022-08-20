@@ -11,6 +11,8 @@ import { ProductVariantsModule } from './product-variants/product-variants.modul
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ProductCategoriesModule } from './product-categories/product-categories.module';
 import { TaxRatesModule } from './tax-rates/tax-rates.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { TaxRatesModule } from './tax-rates/tax-rates.module';
     ProductVariantsModule,
     ProductCategoriesModule,
     TaxRatesModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

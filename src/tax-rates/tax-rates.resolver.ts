@@ -9,9 +9,7 @@ export class TaxRatesResolver {
   constructor(private readonly taxRatesService: TaxRatesService) {}
 
   @Mutation(() => TaxRate)
-  createTaxRate(
-    @Args('createTaxRateInput') createTaxRateInput: CreateTaxRateInput,
-  ) {
+  createTaxRate(@Args('taxRate') createTaxRateInput: CreateTaxRateInput) {
     return this.taxRatesService.create(createTaxRateInput);
   }
 

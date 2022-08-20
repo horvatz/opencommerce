@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth-guard';
 import { CheckoutService } from './checkout.service';
 import { CreateCheckoutItemArgs } from './dto/args/create-checkout-item.args';
 import { FindAllCheckoutsArgs } from './dto/args/find-all-checkouts.args';
@@ -22,6 +24,7 @@ export class CheckoutResolver {
 
   // Returns only completed checkouts
   @Query(() => [Checkout], { name: 'checkouts' })
+  @UseGuards(GqlAuthGuard)
   findAll(@Args() findAllCheckoutsArgs: FindAllCheckoutsArgs) {
     return this.checkoutService.findAll(findAllCheckoutsArgs);
   }

@@ -122,6 +122,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Token {
+  access_token: String!
+}
+
 type Query {
   products: [Product!]!
   product(
@@ -265,9 +279,11 @@ type Mutation {
   createProductCategory(category: CreateProductCategoryInput!): ProductCategory!
   updateProductCategory(category: UpdateProductCategoryInput!, id: Int!): ProductCategory!
   removeProductCategory(id: Int!): ProductCategory!
-  createTaxRate(createTaxRateInput: CreateTaxRateInput!): TaxRate!
+  createTaxRate(taxRate: CreateTaxRateInput!): TaxRate!
   updateTaxRate(id: Int!, taxRate: UpdateTaxRateInput!): TaxRate!
   removeTaxRate(id: Int!): TaxRate!
+  createAccessToken(user: CreateAccessTokenInput!): Token!
+  createUser(user: CreateUserInput!): User!
 }
 
 input CreateProductInput {
@@ -381,4 +397,16 @@ input UpdateTaxRateInput {
 
   """Actual tax rate in deciamsl"""
   rate: Decimal
+}
+
+input CreateAccessTokenInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }
