@@ -133,7 +133,7 @@ type User {
 }
 
 type Token {
-  access_token: String!
+  accessToken: String!
 }
 
 type Query {

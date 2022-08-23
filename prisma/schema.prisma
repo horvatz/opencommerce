@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 //generator nestgraphql {
 //  provider = "node node_modules/prisma-nestjs-graphql"
 //  output   = "../src/@generated"

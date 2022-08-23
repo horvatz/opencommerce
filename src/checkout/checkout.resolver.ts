@@ -31,6 +31,7 @@ export class CheckoutResolver {
 
   // Returns only completed checkouts
   @Query(() => Checkout, { name: 'completedCheckout' })
+  @UseGuards(GqlAuthGuard)
   findCompletedCheckout(@Args() findCheckoutArgs: FindCheckoutArgs) {
     return this.checkoutService.findCompletedCheckout(findCheckoutArgs);
   }
@@ -96,6 +97,7 @@ export class CheckoutResolver {
   }
 
   @Mutation(() => Checkout)
+  @UseGuards(GqlAuthGuard)
   checkoutStatusUpdate(
     @Args() updateCheckoutStatusArgs: UpdateCheckoutStatusArgs,
   ) {

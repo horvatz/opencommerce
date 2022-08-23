@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth-guard';
 import { CreateProductVariantArgs } from './dto/args/create-product-variant.args';
 import { FindProductVariantArgs } from './dto/args/find-product-variant.args';
 import { UpdateProductVariantArgs } from './dto/args/update-product-variant.args';
@@ -17,6 +19,7 @@ export class ProductVariantsResolver {
   }
 
   @Mutation(() => ProductVariant)
+  @UseGuards(GqlAuthGuard)
   productVariantCreate(
     @Args() createProductVariantArgs: CreateProductVariantArgs,
   ) {
@@ -24,6 +27,7 @@ export class ProductVariantsResolver {
   }
 
   @Mutation(() => ProductVariant)
+  @UseGuards(GqlAuthGuard)
   productVariantUpdate(
     @Args() updateProductVariantArgs: UpdateProductVariantArgs,
   ) {
@@ -31,6 +35,7 @@ export class ProductVariantsResolver {
   }
 
   @Mutation(() => ProductVariant)
+  @UseGuards(GqlAuthGuard)
   productVariantRemove(
     @Args() removeProductVariantArgs: FindProductVariantArgs,
   ) {

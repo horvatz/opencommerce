@@ -13,6 +13,7 @@ import { ProductCategoriesModule } from './product-categories/product-categories
 import { TaxRatesModule } from './tax-rates/tax-rates.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UsersModule } from './users/users.module';
       rootPath: join(__dirname, '..', '../uploads'), // added ../ to get one folder back
       serveRoot: '/uploads/', //last slash was important
     }),
+    ConfigModule.forRoot(),
     ProductsModule,
     PrismaModule,
     CheckoutModule,

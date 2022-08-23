@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { createWriteStream } from 'fs';
 import { UserInputError } from 'apollo-server-express';
 import { FindProductMediaArgs } from './dto/args/find-product-media.args';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth-guard';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -25,21 +27,25 @@ export class ProductsResolver {
   }
 
   @Mutation(() => Product)
+  @UseGuards(GqlAuthGuard)
   productCreate(@Args() createProductArgs: CreateProductArgs) {
     return this.productsService.create(createProductArgs);
   }
 
   @Mutation(() => Product)
+  @UseGuards(GqlAuthGuard)
   productUpdate(@Args() updateProductArgs: UpdateProductArgs) {
     return this.productsService.update(updateProductArgs);
   }
 
   @Mutation(() => Product)
+  @UseGuards(GqlAuthGuard)
   productRemove(@Args() removeProductArgs: FindProductArgs) {
     return this.productsService.delete(removeProductArgs);
   }
 
   @Mutation(() => Product)
+  @UseGuards(GqlAuthGuard)
   async productMediaUpload(
     @Args() createProductMediaArgs: CreateProductMediaArgs,
   ) {
@@ -64,6 +70,7 @@ export class ProductsResolver {
   }
 
   @Mutation(() => Product)
+  @UseGuards(GqlAuthGuard)
   productMediaRemove(
     @Args() removeProductVariantMediaArgs: FindProductMediaArgs,
   ) {

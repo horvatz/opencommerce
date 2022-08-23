@@ -3,6 +3,8 @@ import { ProductCategoriesService } from './product-categories.service';
 import { ProductCategory } from './entities/product-category.entity';
 import { CreateProductCategoryInput } from './dto/create-product-category.input';
 import { UpdateProductCategoryInput } from './dto/update-product-category.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth-guard';
 
 @Resolver(() => ProductCategory)
 export class ProductCategoriesResolver {
@@ -11,6 +13,7 @@ export class ProductCategoriesResolver {
   ) {}
 
   @Mutation(() => ProductCategory)
+  @UseGuards(GqlAuthGuard)
   createProductCategory(
     @Args('category')
     category: CreateProductCategoryInput,
@@ -29,6 +32,7 @@ export class ProductCategoriesResolver {
   }
 
   @Mutation(() => ProductCategory)
+  @UseGuards(GqlAuthGuard)
   updateProductCategory(
     @Args('category')
     category: UpdateProductCategoryInput,
@@ -38,6 +42,7 @@ export class ProductCategoriesResolver {
   }
 
   @Mutation(() => ProductCategory)
+  @UseGuards(GqlAuthGuard)
   removeProductCategory(@Args('id', { type: () => Int }) id: number) {
     return this.productCategoriesService.remove(id);
   }
