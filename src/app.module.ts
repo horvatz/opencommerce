@@ -25,7 +25,9 @@ import { ConfigModule } from '@nestjs/config';
       rootPath: join(__dirname, '..', '../uploads'), // added ../ to get one folder back
       serveRoot: '/uploads/', //last slash was important
     }),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     ProductsModule,
     PrismaModule,
     CheckoutModule,

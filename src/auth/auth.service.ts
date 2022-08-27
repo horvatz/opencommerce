@@ -3,10 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as argon from 'argon2';
 import { CreateAccessTokenInput } from './dto/inputs/create-access-token.input';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService, private jwt: JwtService) {}
+  constructor(
+    private config: ConfigService,
+    private userService: UsersService,
+    private jwt: JwtService,
+  ) {}
 
   async validate(createAcessTokenInput: CreateAccessTokenInput) {
     const { email, password } = createAcessTokenInput;
@@ -31,7 +36,7 @@ export class AuthService {
       email,
     };
 
-    const secret = 'abc123';
+    const secret = this.config.get('JWT_SECRET');
 
     const token = await this.jwt.sign(payload, { secret: secret });
 
