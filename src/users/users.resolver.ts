@@ -17,11 +17,13 @@ export class UsersResolver {
   }
 
   @Query(() => [User], { name: 'users' })
+  @UseGuards(GqlAuthGuard)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
   updateUser(
     @Args('id', { type: () => String }) id: string,
     @Args('user') updateUserInput: UpdateUserInput,
@@ -30,6 +32,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
   removeUser(@Args('id', { type: () => String }) id: string) {
     return this.usersService.remove(id);
   }

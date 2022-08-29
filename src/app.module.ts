@@ -14,6 +14,7 @@ import { TaxRatesModule } from './tax-rates/tax-rates.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ConfigModule } from '@nestjs/config';
     TaxRatesModule,
     AuthModule,
     UsersModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
