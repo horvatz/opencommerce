@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { FindUniqueUserInput } from './dto/inputs/find-unique-user.input';
+import { UserInputError } from 'apollo-server-express';
 
 @Injectable()
 export class UsersService {
@@ -33,6 +34,11 @@ export class UsersService {
       }
       throw error;
     }
+  }
+
+  async findAll(): Promise<User[]> {
+    const users = await this.prisma.user.findMany({ where: {} });
+    return users;
   }
 
   async findOne(findUniqueUserInput: FindUniqueUserInput) {
@@ -64,11 +70,38 @@ export class UsersService {
     });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    try {
+      const user = this.prisma.user.update({
+        where: { id },
+        data: updateUserInput,
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid user ID');
+        }
+        throw error;
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<User> {
+    try {
+      const user = this.prisma.user.delete({
+        where: { id },
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new UserInputError('Invalid user ID');
+        }
+        throw error;
+      }
+    }
   }
 }
