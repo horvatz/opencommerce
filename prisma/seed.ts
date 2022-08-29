@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as argon from 'argon2';
 
 const prisma = new PrismaClient();
 
@@ -6,6 +7,18 @@ async function main() {
   await prisma.product.deleteMany();
   await prisma.productVariant.deleteMany();
   await prisma.country.deleteMany();
+  await prisma.user.deleteMany();
+
+  const hash = await argon.hash('root');
+
+  const user = await prisma.user.create({
+    data: {
+      email: 'root@root.com',
+      firstName: 'root',
+      lastName: 'root',
+      password: hash,
+    },
+  });
 
   const country = await prisma.country.create({
     data: {
@@ -33,6 +46,7 @@ async function main() {
 
   console.log(country);
   console.log(product);
+  console.log(user);
 }
 
 main()
